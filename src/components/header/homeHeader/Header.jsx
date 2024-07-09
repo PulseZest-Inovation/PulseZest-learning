@@ -16,15 +16,15 @@ const Header = () => {
   const [user, setUser] = useState(null); // State to hold logged-in user data
   const [typingText, setTypingText] = useState('');
   const [cursorVisible, setCursorVisible] = useState(true);
-  const autoTypeSpeed = 150;
 
-  const autoTypeText = [
-    'CODING FOR NATION',
-    'START CODING TODAY',
-    'LEARN TO CODE. CHANGE YOUR WORLD.',
-    'PULSEZEST IS BEST :)'
-  ];
-
+ // Text to type effect simulation
+ const autoTypeText = [
+  'CODING FOR NATION',
+  'START CODING TODAY',
+  'LEARN CODE CHANGE WORLD.',
+  'PULSEZEST IS BEST :)'
+];
+const autoTypeSpeed = 100; // Speed in milliseconds
   useEffect(() => {
     let currentText = 0;
     let currentChar = 0;
@@ -47,7 +47,6 @@ const Header = () => {
 
     return () => clearInterval(interval);
   }, []);
-
   // Function to toggle mobile menu
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -133,6 +132,16 @@ const Header = () => {
               <span className="text-green-400">PulseZest-Learning</span>
             </div>
           </Link>
+        </div>
+
+         {/* Auto-typing text (visible only on desktop) */}
+         <div className="hidden md:flex items-center">
+          <span className="font-bold text-2xl">
+            {typingText.split('').map((char, index) => (
+              <span key={index} style={{ color: `hsl(${(index * 10) % 460}, 70%, 50%)`, fontWeight: 'bold', textShadow: '0 0 10px rgba(0,0,0,0.3)' }}>{char}</span>
+            ))}
+            {cursorVisible && <span className="animate-blink">|</span>}
+          </span>
         </div>
 
         {/* Navbar for desktop */}
