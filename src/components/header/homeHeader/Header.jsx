@@ -1,10 +1,11 @@
-// src/Components/Layout/Header.js
+// components/Layout/Header.js
+
 import React, { useState, useEffect } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import Link from 'next/link';
 import Image from 'next/image'; // Use Image from next/image for optimized images
-import Logo from '../../../../../public/1.png';
-import { auth, firestore } from '../../../Utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
+import Logo from '../../../assets/image/logo.png';
+import { auth, firestore } from '../../.././app/Utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { collection, doc, setDoc } from 'firebase/firestore';
 
@@ -162,7 +163,7 @@ const Header = () => {
               }}
               className="glitch-button"
             >
-              {user ? 'Dashboard' : 'Login'} {/* Changed 'Logout' to 'Dashboard' */}
+              {user ? 'Logout' : 'Login'}
               {isHovered && (
                 <span
                   className="glitch"
@@ -203,7 +204,7 @@ const Header = () => {
                     </div>
 
                     {/* Google login button */}
-                    <button onClick={handleLogin} className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">Login with Google</button>
+                    <button onClick={handleLogin}>Login with Google</button>
                   </div>
                 </div>
               </div>
@@ -252,34 +253,8 @@ const Header = () => {
           onClick={handleLoginClick}
           className="block text-gray-800 hover:text-green-400 hover:border-b-2 border-transparent md:border-green-400 py-2 transition duration-300 ease-in-out cursor-pointer w-full text-left"
         >
-          {user ? 'Dashboard' : 'Login'}
+          {user ? 'Logout' : 'Login'}
         </button>
-
-         {/* Login Sidebar for mobile */}
-         {isLoginOpen && !user && (
-              <div className="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 flex justify-end">
-                <div className="bg-white w-80 h-full shadow-md">
-                  <div className="flex justify-end p-4">
-                    <button
-                      onClick={toggleLogin}
-                      className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out"
-                    >
-                      <HiX className="text-2xl" />
-                    </button>
-                  </div>
-                  <div className="p-8">
-                    {/* Company name and logo */}
-                    <div className="flex items-center mb-6">
-                      <Image src={Logo} alt="Company Logo" className="h-8 mr-2" width={32} height={32} />
-                      <span className="text-green-400 text-2xl font-extrabold">PulseZest-Learning</span>
-                    </div>
-
-                    {/* Google login button */}
-                    <button onClick={handleLogin} className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300">Login with Google</button>
-                  </div>
-                </div>
-              </div>
-            )}
       </div>
     </header>
   );
