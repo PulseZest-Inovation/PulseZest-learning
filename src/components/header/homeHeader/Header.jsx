@@ -130,7 +130,7 @@ const Header = () => {
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
               <Image src={Logo} alt="Company Logo" className="h-8 mr-2" width={32} height={32} />
-              <span className="text-green-400">PulseZest-Learning</span>
+              <span className="text-green-400">PulseZest-Learning 👑</span>
             </div>
           </Link>
         </div>

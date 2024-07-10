@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../../utils/Firebase/firebaseConfig'; // Adjust import path as per your project structure
 import Link from 'next/link';
-import CategoryCard from './CourseCard';
+import CategoryCard from '../../../../components/home/CourseCard';
 
 const DesktopHomescreen = () => {
   const [loading, setLoading] = useState(true);
