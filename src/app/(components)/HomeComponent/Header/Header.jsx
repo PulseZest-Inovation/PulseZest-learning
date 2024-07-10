@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Logo from '../../../../../public/1.png';
 import { auth } from '../../../Utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+ 
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
