@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-export default function ProfileLayout({ children, Phone,  Desktop }) {
+export default function ExploreLayout({ children, Phone,  Desktop }) {
   const [isPhone, setIsPhone] = useState(false);
 
   useEffect(() => {
@@ -22,5 +22,9 @@ export default function ProfileLayout({ children, Phone,  Desktop }) {
     };
   }, []);
 
-  return <div>{isPhone ? Phone : Desktop}</div>;
+  return <div>
+     
+    {isPhone ? Phone : Desktop}
+ 
+    </div>;
 }

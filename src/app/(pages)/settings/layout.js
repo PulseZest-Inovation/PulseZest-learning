@@ -1,13 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-export default function ProfileLayout({ children, Phone,  Desktop }) {
+export default function SettingLayout({   Phone,  Desktop }) {
   const [isPhone, setIsPhone] = useState(false);
 
   useEffect(() => {
     // Function to check screen size
     const checkScreenSize = () => {
-      setIsPhone(window.innerWidth <= 768); // Adjust the width as per your requirements
+      setIsPhone(window.innerWidth <= 768);  
     };
 
     // Initial check
@@ -22,5 +22,9 @@ export default function ProfileLayout({ children, Phone,  Desktop }) {
     };
   }, []);
 
-  return <div>{isPhone ? Phone : Desktop}</div>;
+  return <div>
+     
+    {isPhone ? Phone : Desktop}
+ 
+    </div>;
 }

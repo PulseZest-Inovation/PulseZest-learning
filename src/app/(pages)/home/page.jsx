@@ -1,14 +1,7 @@
-import Header from '../../../components/header/homeHeader/Header';
+import React from 'react'
 
-
-const Home = () => {
+export default function DefaultHomeScreen() {
   return (
-    <div>
-      <Header />
-     
-     
-    </div>
-  );
-};
-
-export default Home;
+    <div>DefaultHomeScreen</div>
+  )
+}
