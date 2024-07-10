@@ -16,6 +16,7 @@ const firebaseConfig = {
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app); // Ensure auth module is initialized
-  const db = getFirestore(app); // Example firestore initialization, adjust as per your needs
-  
-  export { app, auth, db }; 
+  const firestore = getFirestore(app);
+  const db = firestore; // Alias for Firestore
+
+  export { app, auth, db,firestore  }; 

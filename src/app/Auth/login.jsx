@@ -1,7 +1,7 @@
 // components/Auth/Login.jsx
 
 import React from 'react';
-import { auth } from '../Utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
+import { auth } from '../../utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const Login = ({ onClose, onLogin }) => {
