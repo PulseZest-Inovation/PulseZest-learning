@@ -39,12 +39,12 @@ const Home = ({ children }) => {
   }, []);
 
   return (
-    <div>
-      {false ? (
+    <div className='bg-green-200'>
+      {isLoading ? (
         <LoadingScreen />
       ) : (
         <div>
-          {isPhone ? <BottomNavigationBar /> : <Header />}
+          {isPhone ? <BottomNavigationBar  /> : <Header />}
           <PageTransition>{children}</PageTransition>
         </div>
       )}

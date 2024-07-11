@@ -1,13 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-export default function NotificationLayout({ children, Phone,  Desktop }) {
+export default function CourseLayout({   Phone,  Desktop }) {
   const [isPhone, setIsPhone] = useState(false);
 
   useEffect(() => {
     // Function to check screen size
     const checkScreenSize = () => {
-      setIsPhone(window.innerWidth <= 768); // Adjust the width as per your requirements
+      setIsPhone(window.innerWidth <= 768);  
     };
 
     // Initial check
