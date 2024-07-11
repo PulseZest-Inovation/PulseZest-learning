@@ -1,10 +1,31 @@
 'use client'
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { BellIcon } from '@heroicons/react/outline';
+import { fetchCategories } from '../functions/fetchCourse'; // Adjust import path as per your project structure
+import CategoryCard from '@/components/home/CourseCard';
+
 
 export default function PhoneHomescreen() {
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const categoriesList = await fetchCategories();
+        setCategories(categoriesList);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setLoading(false);
+      }
+    };
+
+    getCategories();
+  }, []);
 
   const handleNotificationClick = () => {
     router.push('/notifications');
@@ -20,6 +41,14 @@ export default function PhoneHomescreen() {
       </header>
 
       <main className="p-4">
+
+      <h2 className="text-xl font-semibold text-green-600">Courses</h2>
+      <div className="grid grid-cols-1 gap-4">
+        {categories.map(category => (
+          <CategoryCard key={category.id} category={category} />
+        ))}
+      </div>
+
         <section className="mb-6">
           <h2 className="text-xl font-semibold text-green-600">Courses</h2>
           <ul className="list-none p-0 space-y-4">

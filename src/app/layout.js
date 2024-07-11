@@ -19,7 +19,7 @@ export default function RootLayout( {children}) {
       <body className={inter.className}>
         
         <Home/>
-        <Herosection/>
+        {/* <Herosection/> */}
         {children}
       </body>
     </html>
