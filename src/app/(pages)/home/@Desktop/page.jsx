@@ -4,6 +4,11 @@ import { CircularProgress } from '@mui/material';
 import { fetchCategories } from '../functions/fetchCourse'; // Adjust import path as per your project structure
 import CategoryCard from '@/components/home/CourseCard';
 
+//Here all Landin page features
+import HeroSection from '../homeFeatures/heroSection/page';
+import JourneyPage from '../homeFeatures/JoiningFeatures/page';
+import BootCamp from '../homeFeatures/WhyChooseUs/page';
+
 const DesktopHomescreen = () => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -32,6 +37,9 @@ const DesktopHomescreen = () => {
   }
 
   return (
+       <div>
+    <HeroSection/>
+
     <div className="container mx-auto px-4 py-8 bg-green-400">
       <h1 className="text-4xl font-bold text-White-800 mb-6">Explore Courses</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -39,6 +47,10 @@ const DesktopHomescreen = () => {
           <CategoryCard key={category.id} category={category} />
         ))}
       </div>
+    
+    </div>
+    <BootCamp/>
+    <JourneyPage/>
     </div>
   );
 };

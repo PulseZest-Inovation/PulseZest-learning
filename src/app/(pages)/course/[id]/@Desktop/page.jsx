@@ -3,8 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { PlayIcon, PauseIcon } from "@heroicons/react/solid";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../../../utils/Firebase/firebaseConfig"; // Adjust the path based on your project structure
+import fetchCourseData from "../Function/fetchCourseData"; // Adjust the import path as per your project structure
 
 export default function CourseDesktopScreen({ params }) {
   const docId = params.id;
@@ -15,8 +14,8 @@ export default function CourseDesktopScreen({ params }) {
     regularPrice: '',
     salePrice: '',
     description: '',
-    whatYouLearn: [],
-    courseRequirements: [],
+    whatYouLearn: '',
+    courseRequirements: '',
     instructor: '',
     duration: '',
     language: '',
@@ -47,24 +46,15 @@ export default function CourseDesktopScreen({ params }) {
   };
 
   useEffect(() => {
-    const fetchCourseData = async () => {
-      try {
-        const docRef = doc(db, "courses", docId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setCourseData(docSnap.data());
-        } else {
-          console.log("No such document!");
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error getting document:", error);
-        setIsLoading(false);
+    const fetchData = async () => {
+      const data = await fetchCourseData(docId);
+      if (data) {
+        setCourseData(data);
       }
+      setIsLoading(false);
     };
 
-    fetchCourseData();
+    fetchData();
   }, [docId]);
 
   if (isLoading) {
@@ -74,7 +64,7 @@ export default function CourseDesktopScreen({ params }) {
   return (
     <div className="min-h-screen bg-green-200 pt-8 pb-16">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8">
-        <h1>{courseData.courseName}</h1>
+        <h1 className="p-6 text-3xl font-bold text-green-600">{courseData.name}</h1>
         <div className="relative">
           <video
             ref={videoRef}
@@ -112,12 +102,7 @@ export default function CourseDesktopScreen({ params }) {
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-3xl font-bold text-green-600">
-                {courseData.courseName}
-              </h2>
-              <p className="text-lg text-gray-600">
-                {courseData.courseLevel}
-              </p>
+              <p className="text-lg text-gray-800">{courseData.courseLevel}</p>
             </div>
             <div className="text-3xl font-bold text-green-600 mb-4">
               {courseData.salePrice && (
@@ -125,15 +110,25 @@ export default function CourseDesktopScreen({ params }) {
               )}
               {" "}
               {courseData.salePrice}
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <div className="relative overflow-hidden bg-blue-500 text-white px-2 py-1 rounded-md text-sm">
+                <span className="absolute inset-0 bg-blue-500 opacity-50 rounded-md transform rotate-45"></span>
+                <span className="absolute inset-0 bg-blue-500 opacity-50 rounded-md transform -rotate-45"></span>
+                <span className="relative z-10">Newly Launched</span>
+              </div>
+
+
 
             </div>
-
+            <button className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors">
+              Enroll Now
+            </button>
           </div>
-          <div className="p-6 flex justify-end">
-      <button className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors">
-        Enroll Now
-      </button>
-    </div>
+
+          <br></br>
 
           <div className="mb-6">
             <h3 className="text-2xl font-semibold text-green-600 mb-2">
@@ -159,21 +154,21 @@ export default function CourseDesktopScreen({ params }) {
             </h3>
             <div className="flex justify-between items-center">
               <p className="text-lg text-gray-700">
-                Instructor: {courseData.instructor}
+                <span className="font-semibold text-black">Instructor:</span>🧑‍🏫 Prof. Rishab Chauhan 
               </p>
               <p className="text-lg text-gray-700">
-                Duration: {courseData.duration}
+                <span className="font-semibold text-black">Language:</span> Hindi
               </p>
               <p className="text-lg text-gray-700">
-                Language: {courseData.language}
-              </p>
-              <p className="text-lg text-gray-700">
-                Rating: {courseData.rating} / 5
+                <span className="font-semibold text-black">Rating:</span>{" "}
+                ⭐️⭐️⭐️⭐️½
               </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   );
 }
+

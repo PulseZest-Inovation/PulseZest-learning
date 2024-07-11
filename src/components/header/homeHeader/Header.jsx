@@ -19,7 +19,7 @@ const Header = () => {
   const autoTypeText = [
     'CODING FOR NATION',
     'START CODING TODAY',
-    'LEARN CODE CHANGE WORLD.',
+   
     'PULSEZEST IS BEST :)'
   ];
   const autoTypeSpeed = 100;
