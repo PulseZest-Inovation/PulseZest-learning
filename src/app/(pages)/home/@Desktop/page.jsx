@@ -7,7 +7,11 @@ import CategoryCard from '@/components/home/CourseCard';
 //Here all Landin page features
 import HeroSection from '../homeFeatures/heroSection/page';
 import JourneyPage from '../homeFeatures/JoiningFeatures/page';
-import BootCamp from '../homeFeatures/WhyChooseUs/page';
+import WhyChooseUs from '../homeFeatures/WhyChooseUs/page';
+import BootCampWebinar from '../homeFeatures/BootCamp&Webinar/page';
+import FooterPage from '../../../../components/footer/page';
+import Advantage from '../homeFeatures/Advantage/page';
+
 
 const DesktopHomescreen = () => {
   const [loading, setLoading] = useState(true);
@@ -49,8 +53,11 @@ const DesktopHomescreen = () => {
       </div>
     
     </div>
-    <BootCamp/>
+    <Advantage/>
+    <BootCampWebinar/>
+    <WhyChooseUs/>
     <JourneyPage/>
+    <FooterPage/>
     </div>
   );
 };

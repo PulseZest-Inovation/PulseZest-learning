@@ -136,22 +136,23 @@ const BootCamp = () => {
           />
         </div>
 
-        {/* Video Card */}
-        <div style={videoCardStyle}>
-          <iframe
-            title={currentVideo.title}
-            width="100%"
-            height="300"
-            src={currentVideo.src} // Dynamic source based on clicked box
-            frameBorder="0"
-            allowFullScreen
-            style={{ borderRadius: "8px" }}
-          ></iframe>
-          <div style={{ padding: "10px" }}>
-            <h2 style={{ fontSize: "1.5rem", margin: "0", color: "#333" }}>{currentVideo.title}</h2>
-            <p style={{ fontSize: "1rem", margin: "0", color: "#666" }}>{currentVideo.by}</p>
-          </div>
-        </div>
+       {/* Video Card */}
+<div style={videoCardStyle}>
+  <iframe
+    title={currentVideo.title}
+    width="100%"
+    height="250"
+    src={currentVideo.src} // Dynamic source based on clicked box
+    frameBorder="0"
+    allowFullScreen
+    style={{ borderRadius: "8px 8px 0 0", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
+  ></iframe>
+  <div style={{ padding: "20px" }}>
+    <h2 style={{ fontSize: "1.8rem", margin: "0", color: "#333", fontWeight: "bold" }}>{currentVideo.title}</h2>
+    <p style={{ fontSize: "1.2rem", margin: "5px 0 0", color: "#666" }}>{currentVideo.by}</p>
+   
+  </div>
+</div>
 
         {/* Three Rectangle Boxes */}
         <div style={boxContainerStyle}>
@@ -159,19 +160,19 @@ const BootCamp = () => {
             style={{ ...boxStyle, backgroundColor: "#FF6B6B", ...boxHoverStyle }}
             onClick={box1Clicked}
           >
-            24/7 Doubt Support
+           🔍 24/7 Doubt Support
           </div>
           <div
             style={{ ...boxStyle, backgroundColor: "#6BFFB8", ...boxHoverStyle }}
             onClick={box2Clicked}
           >
-            Live Webinar & BootCamps
+           🏕️ Live Webinar & BootCamps
           </div>
           <div
             style={{ ...boxStyle, backgroundColor: "#6B8CFF", ...boxHoverStyle }}
             onClick={box3Clicked}
           >
-            Projects Assistance
+           💼 Projects Assistance
           </div>
         </div>
       </div>
