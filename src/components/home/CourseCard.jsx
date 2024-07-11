@@ -11,7 +11,7 @@ const CategoryCard = ({ category }) => {
                     <ul>
                         {category.courses.map(course => (
                             <li key={course.id} className="mb-4">
-                                <Link href={`/home/CourseDetails/${course.id}`}>
+                                <Link href={`/course/${course.id}`}>
                                     <p className="block bg-green-100 hover:bg-green-400 rounded-lg p-4 transition duration-300">
                                         <div className="flex items-center mb-2">
                                             <img
