@@ -147,7 +147,7 @@ const Footer = () => {
 <div style={{ backgroundColor: '#0000', padding: '20px 0', textAlign: 'center' }}>
   <div style={{ fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', position: 'relative', display: 'inline-block' }}>
           ⭐ PULSE ZEST LEARNING ⭐
-    <span style={{ position: 'absolute', top: '0', left: '110', right: '0', bottom: '0', zIndex: '-1', letterSpacing: '0.1em', color: '#ffffff', opacity: '0.1', transform: 'translate(4px, 4px)' }}>PULSE ZEST LEARNING</span>
+ 
   </div>
 </div>
 </div>
