@@ -5,7 +5,7 @@ import { PlayIcon, PauseIcon } from "@heroicons/react/solid";
 
 export default function CourseDesktopScreen( {params}) {
   // Dummy data, replace with actual data
-   
+   const Uid = params.id;
 
   const courseData = {
     courseLevel: "Beginner",
@@ -55,7 +55,6 @@ export default function CourseDesktopScreen( {params}) {
   return (
     <div className="min-h-screen bg-green-200 pt-8 pb-16">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8">
-        <h1>{params.id}</h1>
         <div className="relative">
           <video
             ref={videoRef}
