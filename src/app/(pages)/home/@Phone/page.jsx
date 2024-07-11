@@ -42,12 +42,15 @@ export default function PhoneHomescreen() {
 
       <main className="p-4">
 
+      <section className='mb-6'>
       <h2 className="text-xl font-semibold text-green-600">Courses</h2>
       <div className="grid grid-cols-1 gap-4">
         {categories.map(category => (
           <CategoryCard key={category.id} category={category} />
         ))}
       </div>
+      </section>
+     
 
         <section className="mb-6">
           <h2 className="text-xl font-semibold text-green-600">Courses</h2>
@@ -66,6 +69,8 @@ export default function PhoneHomescreen() {
             </li>
           </ul>
         </section>
+
+
       </main>
 
      
