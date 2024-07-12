@@ -119,9 +119,9 @@ const Footer = () => {
           <div style={sectionStyle}>
             <h3 style={headingStyle}>Community</h3>
             <ul style={ulStyle}>
-              <li style={liStyle}><a href="#" style={linkStyle}>Instagram</a></li>
-              <li style={liStyle}><a href="#" style={linkStyle}>Discord</a></li>
-              <li style={liStyle}><a href="#" style={linkStyle}>Website</a></li>
+              <li style={liStyle}><a href="https://www.instagram.com/pulsezest/" style={linkStyle}>Instagram</a></li>
+              <li style={liStyle}><a href="https://discord.gg/9RnH5jPr" style={linkStyle}>Discord</a></li>
+              <li style={liStyle}><a href="https://pulsezest.com/" style={linkStyle}>Website</a></li>
             </ul>
           </div>
         </div>

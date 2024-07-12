@@ -11,6 +11,9 @@ import WhyChooseUs from '../homeFeatures/WhyChooseUs/page';
 import BootCampWebinar from '../homeFeatures/BootCamp&Webinar/page';
 import FooterPage from '../../../../components/footer/page';
 import Advantage from '../homeFeatures/Advantage/page';
+import BenefitsSection from '../homeFeatures/BootCamp&Webinar/features/BenefitsSection';
+import FacultyPage from '../homeFeatures/Faculty&Students/page';
+import StudentSection from '../homeFeatures/Faculty&Students/page2';
 
 
 const DesktopHomescreen = () => {
@@ -55,6 +58,9 @@ const DesktopHomescreen = () => {
     </div>
     <Advantage/>
     <BootCampWebinar/>
+    <BenefitsSection/>
+    <FacultyPage/>
+    <StudentSection/>
     <WhyChooseUs/>
     <JourneyPage/>
     <FooterPage/>

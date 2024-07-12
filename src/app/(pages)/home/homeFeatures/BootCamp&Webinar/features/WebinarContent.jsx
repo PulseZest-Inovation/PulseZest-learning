@@ -1,47 +1,148 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import Boy from '../../../../../../assets/image/boy.png';
+import Image from 'next/image';
+import Pro from '../../../../../../assets/image/avatar-design.png';
+const Container = styled.div`
+  display: flex;
+  width: 1200px;
+  position: relative;
+  left: -290px;
+  justify-content: center;
+  padding: 50px;
+  background-color: #99CE3E;
+`;
 
-const WebinarPage = () => {
-  const headerRef = useRef(null);
-  const contentRef = useRef(null);
-  const footerRef = useRef(null);
+const Card = styled.div`
+  background-color: #1c1c1e;
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  width: 450px;
+  margin: 0 20px;
+  padding: 20px;
+  position: relative;
+`;
 
-  useEffect(() => {
-    const fadeInElements = [headerRef.current, contentRef.current, footerRef.current];
+const Label = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 2px;
+  background-color: ${props => props.bgColor || '#ff5700'};
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+`;
 
-    fadeInElements.forEach((element) => {
-      if (element) {
-        element.style.opacity = 1;
-        element.style.transform = 'translateY(0)';
-      }
-    });
-  }, []);
+const Title = styled.h2`
+  font-size: 1.5rem;
+  margin-top: 20px;
+`;
 
+const Description = styled.p`
+  margin: 10px 0;
+`;
+
+const InfoList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+  li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    &:before {
+      content: '✔️';
+      margin-right: 10px;
+      color: #00ff8c;
+    }
+  }
+`;
+
+const ExploreButton = styled.button`
+  background-color: white;
+  color: #51CE3E;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  &:hover {
+    background-color: #51CE3E;
+    color: white ;
+  }
+`;
+
+const Header = styled.div`
+  text-align: center;
+  margin-bottom: 50px;
+  h1 {
+    font-size: 2.5rem;
+    color: #000000;
+  }
+  span {
+    color: #ff6f61;
+    display: block;
+    margin-top: 10px;
+    font-size: 1.2rem;
+  }
+`;
+
+const CardImage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+`;
+
+const App = () => {
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f0f0f0', color: '#333', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', boxSizing: 'border-box' }}>
-      <header ref={headerRef} style={{ textAlign: 'center', marginBottom: '2rem', opacity: 0, transform: 'translateY(20px)', transition: 'opacity 0.5s, transform 0.5s' }}>
-        <h1>Welcome to Our Webinar</h1>
-        <p>Join us for an exciting session!</p>
-      </header>
-
-      <section ref={contentRef} style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '2rem', opacity: 0, transform: 'translateY(20px)', transition: 'opacity 0.5s, transform 0.5s' }}>
-        <h2>Under Work</h2>
-       
-      </section>
-
-      <section style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '2rem', opacity: 0, transform: 'translateY(20px)', transition: 'opacity 0.5s, transform 0.5s' }}>
-        <h2>Register Now</h2>
-        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <input type="text" placeholder="Your Name" style={{ width: '100%', padding: '1rem', marginBottom: '1rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '1rem' }} />
-          <input type="email" placeholder="Your Email" style={{ width: '100%', padding: '1rem', marginBottom: '1rem', border: '1px solid #ccc', borderRadius: '4px', fontSize: '1rem' }} />
-          <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '1rem 2rem', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem', transition: 'background-color 0.3s ease' }}>Register</button>
-        </form>
-      </section>
-
-      <footer ref={footerRef} style={{ textAlign: 'center', marginTop: 'auto', opacity: 0, transition: 'opacity 0.5s' }}>
-        <p>&copy; 2024 Webinar Inc. All rights reserved.</p>
-      </footer>
-    </div>
+    <>
+      <Header>
+      
+        <h1>🚀 Enhanced courses for exponential growth in skills 🚀</h1>
+      </Header>
+      <Container>
+        <Card>
+          <Label bgColor="#ff6f61">Newly launched for students 🎓</Label>
+          <CardImage>
+            <Image src={Boy} alt="Avatar" />
+          </CardImage>
+          <Title>PulseZest-Learning Zesty Tech</Title>
+          <Description>2 years program for 1st to pre-final year college students</Description>
+          <InfoList>
+            <li>Get job assistance</li>
+            <li>Complete CS education</li>
+            <li>2 year flexible student track</li>
+          </InfoList>
+          <ExploreButton>Explore Offers</ExploreButton>
+        </Card>
+        <Card>
+          <Label bgColor="#2196f3">For professionals 👨‍💼</Label>
+          <CardImage>
+            <Image src={Pro} alt="Avatar" />
+          </CardImage>
+          <Title>Job Bootcamp</Title>
+          <Description>Extensive program for working professionals for get Dream Jobs</Description>
+          <InfoList>
+            <li>Get job assistance</li>
+            <li>FSD/Data career tracks</li>
+            <li>9 months intensive bootcamp</li>
+          </InfoList>
+          <ExploreButton>Join Webinar</ExploreButton>
+        </Card>
+      </Container>
+    </>
   );
-};
+}
 
-export default WebinarPage;
+export default App;
