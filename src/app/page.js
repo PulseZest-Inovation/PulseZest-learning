@@ -46,6 +46,7 @@ const Home = ({ children }) => {
         <div>
           {isPhone ? <BottomNavigationBar  /> : <Header />}
           <PageTransition>{children}</PageTransition>
+          
         </div>
       )}
     </div>

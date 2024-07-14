@@ -1,12 +1,18 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import { PlayIcon, PauseIcon } from "@heroicons/react/solid";
-import fetchCourseData from "../Function/fetchCourseData"; // Adjust the import path as per your project structure
+import React, { useState, useRef, useEffect } from 'react';
+import { PlayIcon, PauseIcon } from '@heroicons/react/solid';
+
+
+import fetchCourseData from '../Function/fetchCourseData'; // Adjust the import path as per your project structure
+import { useAuthState } from 'react-firebase-hooks/auth'; // Firebase auth hook
+import { auth } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
+import Link from 'next/link'; // Import Link from Next.js for navigation
 
 export default function CourseDesktopScreen({ params }) {
-  const docId = params.id;
+  const { id } = params; // Destructure id from params
+  const [user, loading, error] = useAuthState(auth); // Fetch user state from Firebase auth
+
   const [courseData, setCourseData] = useState({
     courseName: '',
     introVideo: '',
@@ -19,9 +25,20 @@ export default function CourseDesktopScreen({ params }) {
     instructor: '',
     duration: '',
     language: '',
-    rating: ''
+    rating: '',
   });
-  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchCourseData(id); // Fetch course data based on id
+      if (data) {
+        setCourseData(data);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -45,20 +62,20 @@ export default function CourseDesktopScreen({ params }) {
     setIsHovered(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchCourseData(docId);
-      if (data) {
-        setCourseData(data);
-      }
-      setIsLoading(false);
-    };
+  const handleEnrollClick = () => {
+    if (user) {
+      // Redirect to checkout page with id
+      window.location.href = `/${id}/checkout`;
+    } else {
+      // Redirect to login or show a message
+      console.log('User is not logged in. Redirecting to login page...');
+      // For example, you could navigate to a login page using Next.js Link component:
+      // Router.push('/login');
+    }
+  };
 
-    fetchData();
-  }, [docId]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state while user authentication is in progress
   }
 
   return (
@@ -77,8 +94,9 @@ export default function CourseDesktopScreen({ params }) {
             onPause={() => setIsPlaying(false)}
           />
           <div
-            className={`absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 ${isPlaying || isHovered ? "opacity-100" : "opacity-0"
-              } transition-opacity duration-300`}
+            className={`absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 ${
+              isPlaying || isHovered ? 'opacity-100' : 'opacity-0'
+            } transition-opacity duration-300`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -105,10 +123,10 @@ export default function CourseDesktopScreen({ params }) {
               <p className="text-lg text-gray-800">{courseData.courseLevel}</p>
             </div>
             <div className="text-3xl font-bold text-green-600 mb-4">
-              {courseData.salePrice && (
+              ₹{courseData.salePrice && (
                 <span className="line-through"> {courseData.regularPrice}</span>
               )}
-              {" "}
+              {' '}
               {courseData.salePrice}
             </div>
           </div>
@@ -119,16 +137,15 @@ export default function CourseDesktopScreen({ params }) {
                 <span className="absolute inset-0 bg-blue-500 opacity-50 rounded-md transform -rotate-45"></span>
                 <span className="relative z-10">Newly Launched</span>
               </div>
-
-
-
             </div>
-            <button className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors">
-              Enroll Now
-            </button>
+            <Link href={`/${id}/checkout`} passHref>
+              <p onClick={handleEnrollClick} className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                {user ? 'Enroll Now' : 'Enroll Now'}
+              </p>
+            </Link>
           </div>
 
-          <br></br>
+          <br />
 
           <div className="mb-6">
             <h3 className="text-2xl font-semibold text-green-600 mb-2">
@@ -168,7 +185,6 @@ export default function CourseDesktopScreen({ params }) {
         </div>
       </div>
     </div>
-
   );
 }
 
