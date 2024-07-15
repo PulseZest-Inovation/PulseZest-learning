@@ -1,24 +1,25 @@
-"use client";
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { doc, setDoc, getDoc, collection } from 'firebase/firestore'; // Import getDoc to fetch document
+import { doc, setDoc, getDoc, collection } from 'firebase/firestore';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { toast, ToastContainer } from 'react-toastify'; // Import toast library
-import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AgreeMent from '../../../../components/courseComponents/terms-of-service/page';
-
+import axios from 'axios'; // Import Axios for making HTTP requests
 
 const steps = ['Login', 'Agreement', 'Payment']; // Define steps for the Stepper
 
 const CheckoutPage = ({ params }) => {
   const [user] = useAuthState(auth);
-  const [activeStep, setActiveStep] = useState(user ? 1 : 0); // Initialize active step based on user login status
+  const [activeStep, setActiveStep] = useState(user ? 1 : 0);
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const { id } = params;
@@ -27,7 +28,6 @@ const CheckoutPage = ({ params }) => {
     try {
       const docRef = doc(db, 'users', userId);
       const docSnap = await getDoc(docRef);
-      console.log(userId)
       if (docSnap.exists()) {
         setUserData(docSnap.data());
       } else {
@@ -38,15 +38,11 @@ const CheckoutPage = ({ params }) => {
     }
   };
 
-
   useEffect(() => {
     if (user) {
       fetchUserData(user.uid);
     }
   }, [user]);
-
-
-
 
   const fetchCourseData = async (courseId) => {
     try {
@@ -65,7 +61,6 @@ const CheckoutPage = ({ params }) => {
   useEffect(() => {
     fetchCourseData(id);
   }, [id]);
-
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -97,7 +92,76 @@ const CheckoutPage = ({ params }) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  // Function to render details under each step
+  const handlePayment = async () => {
+    try {
+      const name = userData ? userData.name : ''; // Fetch from user data if available
+      const email = userData ? userData.email : ''; // Fetch from user data if available
+      const phone = ''; // Replace with actual phone number logic if needed
+
+      const response = await axios.post('http://localhost:3001/api/createOrder', { // Changed port to 3001
+        amount: courseData.salePrice * 100, // Amount in paisa (e.g., ₹100 = 10000 paisa)
+        currency: 'INR', // Adjust based on your currency
+        receipt: 'receipt#1', // Replace with your own receipt logic
+        notes: { name, email, phone } // Use defined variables
+      });
+
+      const { data } = response;
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Use the environment variable directly
+        amount: data.amount,
+        currency: data.currency,
+        order_id: data.id,
+        name: 'PulseZest-Learning',
+        description: 'Course Payment',
+        image: 'https://via.placeholder.com/150', // Replace with your logo URL
+        handler: async function (response) {
+          console.log('Payment success:', response);
+
+          // Save payment details in Firestore under user's document
+          const userCourseRef = doc(collection(db, 'users', user.uid, 'courses'), response.razorpay_order_id);
+          await setDoc(userCourseRef, {
+            courseId: id,
+            amount: data.amount,
+            currency: data.currency,
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            date: new Date()
+          });
+
+          toast.success('Payment successful! Course access granted.', { autoClose: 3000 });
+        },
+        prefill: {
+          name,
+          email,
+          contact: phone
+        },
+        notes: {
+          address: 'Your address'
+        },
+        theme: {
+          color: '#61dafb'
+        }
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      toast.error('Payment failed. Please try again.', { autoClose: 3000 });
+    }
+  };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const renderStepContent = (stepIndex) => {
     switch (stepIndex) {
       case 0:
@@ -129,7 +193,7 @@ const CheckoutPage = ({ params }) => {
           <>
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               This is the agreement step where users need to agree to the terms and conditions.
-              <AgreeMent/>
+              <AgreeMent />
             </Typography>
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               {user ? 'Please agree to the terms and conditions to proceed.' : 'Please log in to proceed.'}
@@ -142,8 +206,7 @@ const CheckoutPage = ({ params }) => {
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               This is the payment step where users can complete their payment.
             </Typography>
-            {/* Implement Payment Integration Here */}
-            <Button variant="contained" color="primary" style={{ backgroundColor: '#4CAF50' }}>Pay Now</Button>
+            <Button variant="contained" color="primary" onClick={handlePayment} style={{ backgroundColor: '#4CAF50' }}>Pay Now</Button>
           </>
         );
       default:
@@ -174,22 +237,20 @@ const CheckoutPage = ({ params }) => {
               </Step>
             ))}
           </Stepper>
-          
-          
 
           {/* Render detailed content for the active step */}
           <div style={{ marginTop: '20px' }}>
             {renderStepContent(activeStep)}
           </div>
+
           {/* Navigation Buttons */}
-      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
-        <Button disabled={activeStep === 0 || (activeStep === 1 && !user)} onClick={handleBack} variant="outlined" style={{ color: '#4CAF50', borderColor: '#4CAF50' }}>Back</Button>
-        <Button disabled={!user} variant="contained" color="primary" onClick={handleNext} style={{ backgroundColor: '#4CAF50' }}>
-          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-        </Button>
-      </div>
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
+            <Button disabled={activeStep === 0 || (activeStep === 1 && !user)} onClick={handleBack} variant="outlined" style={{ color: '#4CAF50', borderColor: '#4CAF50' }}>Back</Button>
+            <Button disabled={!user} variant="contained" color="primary" onClick={handleNext} style={{ backgroundColor: '#4CAF50' }}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </div>
         </div>
-        
 
         {/* Right Side - Course and Student Details */}
         <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -198,14 +259,9 @@ const CheckoutPage = ({ params }) => {
             <strong>Course Id: {id}</strong>
             {courseData ? (
               <>
-                 <img
-                        src={courseData.thumbnail}
-                        alt={courseData.name}
-                        className="w-16 h-16 object-cover rounded-full"
-                      />
-                  <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
-                    <strong>Title:</strong> {courseData.name}
-                  </Typography>
+                <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
+                  <strong>Title:</strong> {courseData.name}
+                </Typography>
                 <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
                   <strong>Instructor:</strong> Rishab Chauhan
                 </Typography>
@@ -216,14 +272,13 @@ const CheckoutPage = ({ params }) => {
             ) : (
               <Typography variant="body1">Loading...</Typography>
             )}
-            {/* Add more course details as needed */}
           </div>
 
           {/* Student Details */}
           {userData && (
             <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '20px', backgroundColor: '#f0f0f0' }}>
               <Typography variant="h5" style={{ marginBottom: '20px', color: '#4CAF50' }}>Student Details</Typography>
-              <strong>Student Id: {user.uid} </strong >
+              <strong>Student Id: {user.uid} </strong>
               <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
                 <strong>Name: {userData.name}</strong>
               </Typography>
@@ -233,12 +288,10 @@ const CheckoutPage = ({ params }) => {
               <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
                 <strong>Suid:{userData.suid}</strong>
               </Typography>
-              {/* Add more student details as needed */}
             </div>
           )}
         </div>
       </div>
-
 
       {/* Toast Container */}
       <ToastContainer position="bottom-right" autoClose={3000} />
