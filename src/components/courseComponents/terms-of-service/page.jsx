@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TermsOfService({ onAgree }) {
+export default function TermsOfService() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8 p-8">
@@ -37,12 +37,7 @@ export default function TermsOfService({ onAgree }) {
           </p>
         </div>
         <div className="mt-6">
-          <button
-            onClick={onAgree}
-            className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors"
-          >
-            I Understand
-          </button>
+        
         </div>
       </div>
     </div>
