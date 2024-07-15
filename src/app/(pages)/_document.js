@@ -6,7 +6,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           {/* Load Razorpay SDK */}
-          <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+          <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
         </Head>
         <body>
           <Main />

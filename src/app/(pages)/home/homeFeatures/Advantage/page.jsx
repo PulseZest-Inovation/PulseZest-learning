@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 // Custom styles for glowing text
 const glowingTextStyle = {
@@ -101,11 +102,13 @@ const CoursePage = () => {
        
         <div style={progressBarContainerStyle}>
         <p style={{ color: '#3a3a3a', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
-  <img 
-    src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/2.png?alt=media&token=861cd93c-8d97-4ce5-b6e0-1de3dc4bd509" 
-    style={{ height: '2em', width: '2em', marginRight: '0.5em' }} 
-    alt="PulseZest logo" 
-  /> 
+        <Image
+  src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/2.png?alt=media&token=861cd93c-8d97-4ce5-b6e0-1de3dc4bd509"
+  alt="PulseZest logo"
+  width={500}
+  height={300}
+  style={{ height: '2em', width: '2em', marginRight: '0.5em' }}
+/>
   PulseZest-Learning
 </p>
 

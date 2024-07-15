@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const Footer = () => {
   const footerStyle = {
@@ -96,7 +97,7 @@ const Footer = () => {
         <div className="footer-content" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           <div style={sectionStyle}>
             <div style={logoStyle}>
-              <img src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/logo.png?alt=media&token=208465a0-63ae-4999-9c75-cf976af6a616" alt="Company Logo" style={logoImgStyle} />
+              <Image src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/logo.png?alt=media&token=208465a0-63ae-4999-9c75-cf976af6a616" alt="Company Logo"  width={500} height={300} style={logoImgStyle} />
               <span style={companyNameStyle}>PulseZest-Learning</span>
             </div>
           </div>
@@ -128,14 +129,14 @@ const Footer = () => {
         <div className="contact-info" style={contactInfoStyle}>
           <div style={contactItemStyle}>
             <a href="tel:+916396219233" style={{ display: 'flex', alignItems: 'center', color: '#ffffff', textDecoration: 'none' }}>
-              <img src="https://files.codingninjas.com/phone-31845.svg" alt="Phone Icon" style={{ width: '20px', height: '20px', marginRight: '5px' }} />
+              <Image src="https://files.codingninjas.com/phone-31845.svg" alt="Phone Icon"  width={500} height={300} style={{ width: '20px', height: '20px', marginRight: '5px' }} />
               +91 6396219233
             </a>
           </div>
           <div style={contactItemStyle}>
             <span style={spanStyle}>Copyright © 2024 PulseZest - by PulseZest</span>
             <a href="mailto:info@pulsezest.com" style={{ display: 'flex', alignItems: 'center', color: '#ffffff', textDecoration: 'none' }}>
-              <img src="https://files.codingninjas.com/email-fill-31846.svg" alt="Email Icon" style={{ width: '20px', height: '20px', marginRight: '5px' }} />
+              <Image src="https://files.codingninjas.com/email-fill-31846.svg" alt="Email Icon"  width={500} height={300} style={{ width: '20px', height: '20px', marginRight: '5px' }} />
               info@pulsezest.com
             </a>
           </div>
