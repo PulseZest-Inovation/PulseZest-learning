@@ -1,14 +1,13 @@
 import Head from 'next/head';
-import styled from 'styled-components';
 import { useState } from 'react';
-import Box from '@mui/material/Box';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 50px;
   width: 150%;
-  background-color: #0b0b45;
+  background-color: #151b25;
   color: white;
   font-family: Arial, sans-serif;
 `;
@@ -35,14 +34,14 @@ const SidebarButton = styled.button`
   margin-bottom: 10px;
 
   &:hover {
-    background-color: #00ff8c;
+    background-color: #58b4d1;
     color: white;
   }
 
   ${({ active }) =>
     active &&
     `
-    background-color: #00ff8c;
+    background-color: #58b4d1;
     color: white;
   `}
 `;
@@ -71,21 +70,22 @@ const InfoList = styled.ul`
 const Metrics = styled.div`
   display: flex;
   justify-content: space-around;
-  background-color: #1a1a50;
-  padding: 20px;
+  background-color: #126782;
+  padding: 15px;
   border-radius: 10px;
   margin-top: 20px;
+  gap: 20px;
+
 `;
 
 const Metric = styled.div`
   text-align: center;
-  font-size: 1.2rem;
-`;
+  font-size: 1rem; `;
 
 const FormContainer = styled.div`
   flex: 1;
-  background-color: #4ECC3A;
-  padding: 20px;
+  background-color: #008083;
+  padding: 30px;
   border-radius: 10px;
 `;
 
@@ -103,7 +103,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  background-color: #ff5700;
+  background-color: #d88e45;
   color: white;
   padding: 10px;
   font-size: 1.2rem;
@@ -124,22 +124,22 @@ export default function Home() {
             Available in two formats MERN & Spring-boot, learn by practice and making real world projects.
           </p>
           <InfoList>
-            <li>🎓 Placement Assistance</li>
-            <li>👨‍🏫 1:1 Mentorship</li>
-            <li>🏅 Faculty from MAANG</li>
+            <li>✓ Placement Assistance</li>
+            <li>✓ 1:1 Mentorship</li>
+            <li>✓ Faculty from MAANG</li>
           </InfoList>
           <Metrics>
             <Metric>
               <div>90%</div>
-              <div>placement rate</div>
+              <div>Placement Rate</div>
             </Metric>
             <Metric>
               <div>1200+</div>
-              <div>Hiring partners</div>
+              <div>Hiring Partners</div>
             </Metric>
             <Metric>
               <div>128%</div>
-              <div>Average hike</div>
+              <div>Average Hike</div>
             </Metric>
             <Metric>
               <div>1.5 L+</div>
@@ -156,14 +156,14 @@ export default function Home() {
             Learn data analysis techniques, tools, and methodologies. Prepare for a career in data analytics with hands-on projects.
           </p>
           <InfoList>
-            <li>📊 Data Analysis Techniques</li>
-            <li>💻 Tools & Methodologies</li>
-            <li>📈 Real-World Projects</li>
+            <li>✓ Data Analysis Techniques</li>
+            <li>✓ Tools & Methodologies</li>
+            <li>✓ Real-World Projects</li>
           </InfoList>
           <Metrics>
             <Metric>
               <div>85%</div>
-              <div>placement rate</div>
+              <div>Placement Rate</div>
             </Metric>
             <Metric>
               <div>1000+</div>
@@ -171,7 +171,7 @@ export default function Home() {
             </Metric>
             <Metric>
               <div>115%</div>
-              <div>Average hike</div>
+              <div>Average Hike</div>
             </Metric>
             <Metric>
               <div>1.2 L+</div>
@@ -201,37 +201,38 @@ export default function Home() {
           {renderContent()}
         </Content>
         <FormContainer>
-          <h2>Book a <span style={{color: 'red'}}>free live webinar</span> to know more</h2>
-          <Form>
-            <Input type="text" placeholder="Enter name" required />
-            <Input type="email" placeholder="Email" required />
-            <Input type="tel" placeholder="Phone number" required />
-            <div>
-              <p>Experience:</p>
-              <div>
-                <input type="radio" id="technical" name="experience" value="technical" />
-                <label htmlFor="technical">Working Professional - Technical Roles</label>
-              </div>
-              <div>
-                <input type="radio" id="non-technical" name="experience" value="non-technical" />
-                <label htmlFor="non-technical">Working Professional - Non Technical</label>
-              </div>
-              <div>
-                <input type="radio" id="final-year" name="experience" value="final-year" />
-                <label htmlFor="final-year">College Student - Final Year</label>
-              </div>
-              <div>
-                <input type="radio" id="pre-final" name="experience" value="pre-final" />
-                <label htmlFor="pre-final">College Student - 1st to Pre-final Year</label>
-              </div>
-              <div>
-                <input type="radio" id="others" name="experience" value="others" />
-                <label htmlFor="others">Others</label>
-              </div>
-            </div>
-            <Button type="submit">Continue booking webinar</Button>
-          </Form>
-        </FormContainer>
+  <h2>Book a <span style={{ color: '#f27059' }}>Free live webinar</span> to know more</h2>
+  <Form>
+    <Input type="text" placeholder="Enter name" required />
+    <Input type="email" placeholder="Email" required />
+    <Input type="tel" placeholder="Phone number" required />
+    <div>
+      <p>Experience:</p>
+      <div style={{ marginBottom: '10px' }}>
+        <input type="radio" id="technical" name="experience" value="technical" />
+        <label htmlFor="technical" style={{ marginLeft: '10px' }}>Working Professional - Technical Roles</label>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <input type="radio" id="non-technical" name="experience" value="non-technical" />
+        <label htmlFor="non-technical" style={{ marginLeft: '10px' }}>Working Professional - Non Technical</label>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <input type="radio" id="final-year" name="experience" value="final-year" />
+        <label htmlFor="final-year" style={{ marginLeft: '10px' }}>College Student - Final Year</label>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <input type="radio" id="pre-final" name="experience" value="pre-final" />
+        <label htmlFor="pre-final" style={{ marginLeft: '10px' }}>College Student - 1st to Pre-final Year</label>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <input type="radio" id="others" name="experience" value="others" />
+        <label htmlFor="others" style={{ marginLeft: '10px' }}>Others</label>
+      </div>
+    </div>
+    <Button type="submit">Continue booking webinar</Button>
+  </Form>
+</FormContainer>
+
       </Container>
     </>
   );

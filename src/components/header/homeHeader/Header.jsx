@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { HiX } from 'react-icons/hi';
-import Link from 'next/link';
+import { doc, getDoc, getFirestore } from 'firebase/firestore'; // Ensure you have firebase/firestore installed
 import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { HiX } from 'react-icons/hi';
 import Logo from '../../../assets/image/logo.png';
-import { auth } from '../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
-import { getFirestore, doc, getDoc } from 'firebase/firestore'; // Ensure you have firebase/firestore installed
 import Login from '../../../components/courseComponents/login/page';
+import { auth } from '../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
 
 const db = getFirestore(); // Initialize Firestore
 
@@ -43,13 +43,13 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white text-gray-800 shadow-md relative">
+    <header className="bg-black text-white-800 shadow-md relative">
       <div className="container mx-auto flex justify-between items-center px-4 py-3 md:py-4">
         <div className="text-2xl font-extrabold">
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
-              <Image src={Logo} alt="Company Logo" className="h-8 mr-2" width={32} height={32} />
-              <span className="text-green-400">PulseZest-Learning 👑</span>
+              <Image src={Logo} alt="Company Logo" className="h-10 mr-2" width={40} height={40} />
+              <span className="text-white-400">PulseZest-Learning</span>
             </div>
           </Link>
         </div>
@@ -98,20 +98,20 @@ const Header = () => {
                 style={{
                   padding: '15px 25px',
                   borderRadius: '15px',
-                  border: '2px solid #212121',
-                  color: '#212121',
+                  border: '2px solid #001524',
+                  color: '#FFFFFF',
                   fontWeight: 'bold',
                   fontSize: '18px',
                   overflow: 'hidden',
                   transition: 'background-color 0.3s ease, color 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#4CAF50';
-                  e.target.style.color = '#FFFFFF';
+                  e.target.style.backgroundColor = '#FFFFFF';
+                  e.target.style.color = '#001524';
                 }}
                 onMouseLeave={(e) => {
                   e.target.style.backgroundColor = 'transparent';
-                  e.target.style.color = '#212121';
+                  e.target.style.color = '#FFFFFF';
                 }}
               >
                 Login
@@ -130,7 +130,7 @@ const Header = () => {
                     <div className="p-8">
                       <div className="flex items-center mb-6">
                         <Image src={Logo} alt="Company Logo" className="h-8 mr-2" width={32} height={32} />
-                        <span className="text-green-400 text-2xl font-extrabold">PulseZest-Learning</span>
+                        <span className="text-blue-400 text-2xl font-extrabold">PulseZest-Learning</span>
                       </div>
                       <div className="w-100">
                         <Login onLogin={handleLogin} />
@@ -150,7 +150,7 @@ const Header = () => {
 const NavLink = ({ href, children }) => {
   return (
     <Link href={href}>
-      <p className="text-gray-800 hover:text-green-400 hover:border-b-2 border-transparent md:border-green-400 transition duration-300 ease-in-out">
+      <p className="text-white-800 hover:text-blue-900 hover:border-b-2 border-transparent md:border-blue-400 transition duration-300 ease-in-out">
         {children}
       </p>
     </Link>

@@ -54,7 +54,7 @@ const DesktopHomescreen = () => {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center min-h-screen'>
+      <div className='flex items-center justify-center min-h-screen bg-blue-100'> {/* Updated background color */}
         <CircularProgress />
       </div>
     );
@@ -63,13 +63,13 @@ const DesktopHomescreen = () => {
   console.log(userId);
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#cce3de' }}> {/* Ensure this style is applied globally */}
       <HeroSection />
-      <div className="container mx-auto px-4 py-8 bg-green-400">
-        <h1 className="text-4xl font-bold text-white mb-6">Explore Courses</h1>
+      <div className="container mx-auto px-4 py-8"> {/* Updated background color */}
+        <h1 className="text-4xl font-bold text-blue-900 mb-6">Explore Courses</h1> {/* Updated text color */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {categories.map((category) => (
-            <CategoryCard key={category.id} category={category} userId={userId} /> // Pass userId as prop
+            <CategoryCard key={category.id} category={category} userId={userId} />
           ))}
         </div>
       </div>

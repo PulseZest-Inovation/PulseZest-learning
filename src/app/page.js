@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import LoadingGif from '../assets/gif/loading.gif'; // Ensure this path is correct
 import BottomNavigationBar from '@/components/BottomNavigation/page';
 import Header from '@/components/header/homeHeader/Header';
 import PageTransition from '@/components/PageTransition/pageTransition';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import LoadingGif from '../assets/gif/loading.gif'; // Ensure this path is correct
 
 const Home = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +39,7 @@ const Home = ({ children }) => {
   }, []);
 
   return (
-    <div className='bg-green-200'>
+    <div className='bg-blue-200'>
       {isLoading ? (
         <LoadingScreen />
       ) : (
