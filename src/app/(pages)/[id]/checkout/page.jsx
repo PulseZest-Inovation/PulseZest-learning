@@ -118,7 +118,7 @@ const CheckoutPage = ({ params }) => {
           console.log('Payment success:', response);
 
           // Save payment details in Firestore under user's document
-          const userCourseRef = doc(collection(db, 'users', user.uid, 'courses'), response.razorpay_order_id);
+          const userCourseRef = doc(collection(db, 'users', user.uid, 'courses'), id);
           await setDoc(userCourseRef, {
             courseId: id,
             amount: data.amount,
