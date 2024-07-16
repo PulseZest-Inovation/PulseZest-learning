@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const CategoryCard = ({ category, userId }) => {
 
@@ -17,10 +18,13 @@ const CategoryCard = ({ category, userId }) => {
                 <Link href={`/course/${course.id}`}>
                   <p className="block bg-green-100 hover:bg-green-400 rounded-lg p-4 transition duration-300">
                     <div className="flex items-center mb-2">
-                      <img
+                      <Image
                         src={course.thumbnail}
                         alt={course.name}
                         className="w-16 h-16 object-cover rounded-full"
+                        width={500}
+                        height={300}
+                        style={{ height: '2em', width: '2em', marginRight: '0.5em' }}
                       />
                       <div className="ml-2">
                         <h4 className="text-lg font-semibold text-gray-800">{course.name}</h4>
