@@ -1,4 +1,3 @@
-// components/Auth/Login.jsx
 
 import React from 'react';
 import { auth } from '../../utils/Firebase/firebaseConfig'; // Adjust path as per your project structure

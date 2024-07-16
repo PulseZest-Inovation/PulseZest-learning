@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-export default function ExploreLayout({ children, Phone,  Desktop }) {
+export default function NotificationLayout({ children, Phone,  Desktop }) {
   const [isPhone, setIsPhone] = useState(false);
 
   useEffect(() => {
