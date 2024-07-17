@@ -2,16 +2,16 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useState } from 'react';
 import Profile1 from '../../../../../assets/profile/1.jpeg';
 import Profile2 from '../../../../../assets/profile/2.png';
 import Profile3 from '../../../../../assets/profile/3.jpg';
-import { positions } from '@mui/system';
 
 const FacultySection = () => {
   const [flippedCard, setFlippedCard] = useState(null);
 
   const sectionStyle = {
-    backgroundColor: '#7FC7D9',
+    backgroundColor: '#cce3de',
     padding: '50px 0', // Increased padding for better spacing
     textAlign: 'center',
   };
@@ -51,7 +51,7 @@ const FacultySection = () => {
   const backStyle = {
     ...frontStyle,
     transform: 'rotateY(180deg)',
-    backgroundColor: '#4CAF50', // Green background when flipped
+    backgroundColor: '#166281', // blue background when flipped
     color: '#ffffff', // White text color when flipped
     display: 'flex',
     flexDirection: 'column',
@@ -63,9 +63,9 @@ const FacultySection = () => {
   const textStyle = {
     position: 'relative',
     top: '20px',
-    color: '#b1ff01',
+    color: '#012a4a',
     fontWeight: 'bold',
-    marginBottom: '60px',
+    marginBottom: '30px',
     fontSize: '1.2rem', // Larger font size for name
   };
 
@@ -82,7 +82,7 @@ const FacultySection = () => {
   };
 
   const languageTagStyle = {
-    backgroundColor: '#b1ff01',
+    backgroundColor: '#007ea7',
     color: '#ffffff',
     padding: '5px 10px',
     borderRadius: '5px',
@@ -101,9 +101,7 @@ const FacultySection = () => {
 
   return (
     <section style={sectionStyle}>
-      <h2 style={{ color: '#ffffff', fontSize: '3rem', marginBottom: '30px' }}>
-       🧑‍🏫 Meet Our Legendary Faculty Members 🧑‍🏫
-      </h2>
+            <h1 className="text-5xl mx-auto font-bold text-blue-900 mb-9 text-center">Meet Our Legendary Faculty Members</h1>
       <div style={cardContainerStyle}>
       
         {/* Card 1 */}
@@ -123,7 +121,7 @@ const FacultySection = () => {
             <span style={languageTagStyle}>React.js</span>
           </div>
           <div style={backStyle}>
-          <h1 style={{position: 'relative', top: '-70px'}}> Rishab Chauhan </h1>
+          <h1 style={{position: 'relative', top: '-50px'}}> Rishab Chauhan </h1>
 
           <p>- Rishab Chauhan serves as a co-founder of our institution, bringing invaluable leadership and vision to our team.</p>
 <p>- Specializes in React.js, with a strong focus on creating dynamic and responsive web applications.</p>
@@ -131,11 +129,11 @@ const FacultySection = () => {
               onClick={() => handleFlipButtonClick(1)}
               style={{
                 position: 'absolute',
-                bottom: '20px',
+                bottom: '30px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 padding: '10px 20px',
-                backgroundColor: '#007bff',
+                backgroundColor: '#001233',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '5px',
@@ -150,11 +148,11 @@ const FacultySection = () => {
             onClick={() => handleFlipButtonClick(1)}
             style={{
               position: 'absolute',
-              bottom: '20px',
+              bottom: '40px',
               left: '50%',
               transform: 'translateX(-50%)',
               padding: '10px 20px',
-              backgroundColor: '#007bff',
+              backgroundColor: '#001233',
               color: '#ffffff',
               border: 'none',
               borderRadius: '5px',
@@ -183,18 +181,18 @@ const FacultySection = () => {
             <span style={languageTagStyle}>Next.js</span>
           </div>
           <div style={backStyle}>
-          <h1 style={{position: 'relative', top: '-70px'}}> Piyush Srivastava </h1>
+          <h1 style={{position: 'relative', top: '-50px'}}> Piyush Srivastava </h1>
           <p>- Piyush Srivastava plays a pivotal role as both an instructor and a founding member of our academy.</p>
 <p>- Expert in Next.js, facilitating the exploration and implementation of advanced front-end technologies.</p>
             <button
               onClick={() => handleFlipButtonClick(2)}
               style={{
                 position: 'absolute',
-                bottom: '20px',
+                bottom: '30px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 padding: '10px 20px',
-                backgroundColor: '#007bff',
+                backgroundColor: '#001233',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '5px',
@@ -209,11 +207,11 @@ const FacultySection = () => {
             onClick={() => handleFlipButtonClick(2)}
             style={{
               position: 'absolute',
-              bottom: '20px',
+              bottom: '40px',
               left: '50%',
               transform: 'translateX(-50%)',
               padding: '10px 20px',
-              backgroundColor: '#007bff',
+              backgroundColor: '#001233',
               color: '#ffffff',
               border: 'none',
               borderRadius: '5px',
@@ -242,18 +240,18 @@ const FacultySection = () => {
             <span style={languageTagStyle}>MongoDB</span>
           </div>
           <div style={backStyle}>
-         <h1 style={{position: 'relative', top: '-70px'}}> Amit Gurjar</h1>
+         <h1 style={{position: 'relative', top: '-50px'}}> Amit Gurjar</h1>
           <p>- Amit Gurjar, a dedicated instructor, specializes in MongoDB and database management.</p>
 <p>- Offers extensive knowledge in designing and optimizing database solutions for various applications.</p>
             <button
               onClick={() => handleFlipButtonClick(3)}
               style={{
                 position: 'absolute',
-                bottom: '20px',
+                bottom: '30px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 padding: '10px 20px',
-                backgroundColor: '#007bff',
+                backgroundColor: '#001233',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '5px',
@@ -268,11 +266,11 @@ const FacultySection = () => {
             onClick={() => handleFlipButtonClick(3)}
             style={{
               position: 'absolute',
-              bottom: '20px',
+              bottom: '40px',
               left: '50%',
               transform: 'translateX(-50%)',
               padding: '10px 20px',
-              backgroundColor: '#007bff',
+              backgroundColor: '#001233',
               color: '#ffffff',
               border: 'none',
               borderRadius: '5px',

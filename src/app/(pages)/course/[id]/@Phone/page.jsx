@@ -1,8 +1,7 @@
 'use client'
-import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import { PlayIcon, PauseIcon, ArrowLeftIcon } from "@heroicons/react/solid";
+import { ArrowLeftIcon, PauseIcon, PlayIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import fetchCourseData from "../Function/fetchCourseData"; // Adjust the import path as per your project structure
 
 export default function CoursePhoneScreen({ params }) {
@@ -80,18 +79,18 @@ export default function CoursePhoneScreen({ params }) {
     fetchData();
   }, [docId]);
   return (
-    <div className="min-h-screen bg-green-200 pt-8 pb-16">
+    <div className="min-h-screen bg-blue-200 pt-8 pb-16">
       <header
         className={`flex justify-between items-center p-4 bg-white shadow w-full fixed top-0 transition-all duration-300 ${isHeaderVisible ? "" : "-translate-y-full"
           }`}
       >
         <Link href="/home">
-          <div className="text-green-600 flex items-center">
+          <div className="text-blue-600 flex items-center">
             <ArrowLeftIcon className="w-6 h-6 mr-2" />
 
           </div>
         </Link>
-        <h1 className="text-2xl font-bold text-green-600">{courseData.name}</h1>
+        <h1 className="text-2xl font-bold text-blue-600">{courseData.name}</h1>
         <div></div>
       </header>
 
@@ -121,14 +120,14 @@ export default function CoursePhoneScreen({ params }) {
             {isPlaying ? (
               <button
                 onClick={handlePlayToggle}
-                className="text-white bg-green-600 p-3 rounded-full hover:bg-green-700 transition-colors"
+                className="text-white bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors"
               >
                 <PauseIcon className="w-10 h-10" />
               </button>
             ) : (
               <button
                 onClick={handlePlayToggle}
-                className="text-white bg-green-600 p-3 rounded-full hover:bg-green-700 transition-colors"
+                className="text-white bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors"
               >
                 <PlayIcon className="w-10 h-10" />
               </button>
@@ -143,31 +142,31 @@ export default function CoursePhoneScreen({ params }) {
               </p>
             </div>
 
-            <div className="text-3xl font-bold text-green-600 mb-4">
+            <div className="text-3xl font-bold text-blue-600 mb-4">
               <span className="line-through">{courseData.regularPrice}</span>{" "}
               {courseData.salePrice}
             </div>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               Description
             </h3>
             <p className="text-lg text-gray-700">{courseData.description}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               What You Will Learn
             </h3>
             <p className="text-lg text-gray-700">{courseData.whatYouLearn}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               Course Requirements
             </h3>
             <p className="text-lg text-gray-700">{courseData.courseRequirements}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               Additional Information
             </h3>
             <div className="flex justify-start items-center">
@@ -195,7 +194,7 @@ export default function CoursePhoneScreen({ params }) {
           <span className="pb-14">
 
           </span>
-          <button className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors w-full fixed bottom-10 left-0 right-0 mb-8">
+          <button className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors w-full fixed bottom-10 left-0 right-0 mb-8">
             Enroll Now
           </button>
         </div>

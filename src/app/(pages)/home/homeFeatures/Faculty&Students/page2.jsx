@@ -6,7 +6,7 @@ import Profile6 from '../../../../../assets/profile/6.jpeg';
 
 const StudentSection = () => {
   const sectionStyle = {
-    backgroundColor: '#293340',
+    backgroundColor: '#264653',
     padding: '50px 0', // Increased padding for better spacing
     textAlign: 'center',
   };
@@ -52,21 +52,19 @@ const StudentSection = () => {
   return  (
     <div>
       <section style={sectionStyle}>
-        <h2 style={{ color: '#ffffff', fontSize: '2rem', marginBottom: '20px' }}>
-          🧑‍🎓 Love From Our Students 🧑‍🎓
-        </h2>
+      <h1 className="text-5xl mx-auto font-bold text-White-900 mb-9 text-center">Love From Our Employees </h1>
         <div style={cardContainerStyle}>
           {/* Card 1 */}
           <div style={cardStyle}>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
             <Image style={profileCircleStyle} src={Profile4} alt="Profile 3" width={100} height={100} />
               <div style={{ marginLeft: '20px' }}>
-                <h3 style={{ color: '#b1ff01', marginBottom: '5px', fontWeight: 'bold' }}>Shruti Varshney</h3>
+                <h3 style={{ color: '#001524', marginBottom: '5px', fontWeight: 'bold' }}>Shruti Varshney</h3>
                 <p style={{ marginBottom: '5px', color: 'black' }}>Hind Press</p>
                 <p style={{ marginBottom: '0', color: 'black' }}>Web Developer</p>
               </div>
             </div>
-            <p style={{ color: '#666666', lineHeight: '1.6', textAlign: 'justify' }}>
+            <p style={{ color: '#001524', lineHeight: '1.6', textAlign: 'justify' }}>
             A web developer, building responsive and user-friendly websites. I thrive on creating seamless user experiences and enjoy tackling complex problems.
             </p>
           </div>
@@ -76,12 +74,12 @@ const StudentSection = () => {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
             <Image style={profileCircleStyle} src={Profile6} alt="Profile 3" width={100} height={100} />
               <div style={{ marginLeft: '20px' }}>
-                <h3 style={{ color: '#b1ff01', marginBottom: '5px', fontWeight: 'bold' }}>Divyansh Chauhan</h3>
+                <h3 style={{ color: '#001524', marginBottom: '5px', fontWeight: 'bold' }}>Divyansh Chauhan</h3>
                 <p style={{ marginBottom: '5px', color: 'black' }}>NO DATA :(</p>
                 <p style={{ marginBottom: '0', color: 'black' }}>Web Developer</p>
               </div>
             </div>
-            <p style={{ color: '#666666', lineHeight: '1.6', textAlign: 'justify' }}>
+            <p style={{ color: '#001524', lineHeight: '1.6', textAlign: 'justify' }}>
             Currently working as a Full Stack Web Developer at PulseZest. I’m a core team member, gaining valuable experience and building a strong network. I have learning a lot from the PulseZest.
             </p>
           </div>
@@ -91,12 +89,12 @@ const StudentSection = () => {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
             <Image style={profileCircleStyle} src={Profile5} alt="Profile 3" width={100} height={100} />
               <div style={{ marginLeft: '20px' }}>
-                <h3 style={{ color: '#b1ff01', marginBottom: '5px', fontWeight: 'bold' }}>Yashi Goyal</h3>
+                <h3 style={{ color: '#001524', marginBottom: '5px', fontWeight: 'bold' }}>Yashi Goyal</h3>
                 <p style={{ marginBottom: '5px', color: 'black' }}>CBSE Walla</p>
                 <p style={{ marginBottom: '0', color: 'black' }}>App Developer</p>
               </div>
             </div>
-            <p style={{ color: '#666666', lineHeight: '1.6', textAlign: 'justify' }}>
+            <p style={{ color: '#001524', lineHeight: '1.6', textAlign: 'justify' }}>
             Currently working as an Android Developer of Frontend and backend as well. Passionate to build and create new Ideas.
             </p>
           </div>

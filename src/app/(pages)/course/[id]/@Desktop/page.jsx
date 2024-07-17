@@ -1,11 +1,13 @@
 'use client'
-import React, { useState, useRef, useEffect } from 'react';
-import { PlayIcon, PauseIcon } from '@heroicons/react/solid';
-import fetchCourseData from '../Function/fetchCourseData'; 
+
+import { PauseIcon, PlayIcon } from '@heroicons/react/solid';
+import { useEffect, useRef, useState } from 'react';
+
+
+import Link from 'next/link'; // Import Link from Next.js for navigation
 import { useAuthState } from 'react-firebase-hooks/auth'; // Firebase auth hook
 import { auth, db } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
 import Link from 'next/link'; // Import Link from Next.js for navigation
-import { doc, getDoc } from 'firebase/firestore'; // Firestore functions
 
 export default function CourseDesktopScreen({ params }) {
   const { id } = params; // Destructure id from params
@@ -90,9 +92,9 @@ export default function CourseDesktopScreen({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-green-200 pt-8 pb-16">
+    <div className="min-h-screen bg-blue-200 pt-8 pb-16">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8">
-        <h1 className="p-6 text-3xl font-bold text-green-600">{courseData.name}</h1>
+        <h1 className="p-6 text-3xl font-bold text-blue-600">{courseData.name}</h1>
         <div className="relative">
           <video
             ref={videoRef}
@@ -114,14 +116,14 @@ export default function CourseDesktopScreen({ params }) {
             {isPlaying ? (
               <button
                 onClick={handlePlayToggle}
-                className="text-white bg-green-600 p-3 rounded-full hover:bg-green-700 transition-colors"
+                className="text-white bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors"
               >
                 <PauseIcon className="w-10 h-10" />
               </button>
             ) : (
               <button
                 onClick={handlePlayToggle}
-                className="text-white bg-green-600 p-3 rounded-full hover:bg-green-700 transition-colors"
+                className="text-white bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors"
               >
                 <PlayIcon className="w-10 h-10" />
               </button>
@@ -133,7 +135,7 @@ export default function CourseDesktopScreen({ params }) {
             <div>
               <p className="text-lg text-gray-800">{courseData.courseLevel}</p>
             </div>
-            <div className="text-3xl font-bold text-green-600 mb-4">
+            <div className="text-3xl font-bold text-blue-600 mb-4">
               ₹{courseData.salePrice && (
                 <span className="line-through"> {courseData.regularPrice}</span>
               )}
@@ -167,30 +169,30 @@ export default function CourseDesktopScreen({ params }) {
           <br />
 
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               Description
             </h3>
             <p className="text-lg text-gray-700">{courseData.description}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               What You Will Learn
             </h3>
             <p className="text-lg text-gray-700">{courseData.whatYouLearn}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               Course Requirements
             </h3>
             <p className="text-lg text-gray-700">{courseData.courseRequirements}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-green-600 mb-2">
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
               Additional Information
             </h3>
             <div className="flex justify-between items-center">
               <p className="text-lg text-gray-700">
-                <span className="font-semibold text-black">Instructor:</span>🧑‍🏫 Prof. Rishab Chauhan 
+                <span className="font-semibold text-black">Instructor:</span> Prof. Rishab Chauhan 
               </p>
               <p className="text-lg text-gray-700">
                 <span className="font-semibold text-black">Language:</span> Hindi

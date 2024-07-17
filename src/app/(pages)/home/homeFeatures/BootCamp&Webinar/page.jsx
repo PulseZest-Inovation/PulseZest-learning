@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import BootCampContent from './features/WebinarContent';
-import WebinarContent from './features/BootCampContent';
 
 const App = () => {
   const [selectedOption, setSelectedOption] = useState('BootCamp');
@@ -13,11 +12,17 @@ const App = () => {
 
   return (
     <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-       <nav style={{ backgroundColor: '#4caf50', padding: '10px 0', width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <button
+<nav style={{
+  backgroundColor: '#001524',
+  padding: '10px 0',
+  width: '25%',
+  display: 'flex',
+  justifyContent: 'center',
+  borderRadius: '15px',  // Adding curved corners
+}}>        <button
           style={{
             backgroundColor: selectedOption === 'BootCamp' ? '#ffffff' : 'transparent',
-            color: selectedOption === 'BootCamp' ? '#4caf50' : '#ffffff',
+            color: selectedOption === 'BootCamp' ? '#001524' : '#ffffff',
             border: 'none',
             padding: '10px 20px',
             cursor: 'pointer',
@@ -33,7 +38,7 @@ const App = () => {
         <button
           style={{
             backgroundColor: selectedOption === 'Webinar' ? '#ffffff' : 'transparent',
-            color: selectedOption === 'Webinar' ? '#4caf50' : '#ffffff',
+            color: selectedOption === 'Webinar' ? '#001524' : '#ffffff',
             border: 'none',
             padding: '10px 20px',
             cursor: 'pointer',

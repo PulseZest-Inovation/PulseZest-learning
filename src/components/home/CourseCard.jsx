@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -16,7 +15,7 @@ const CategoryCard = ({ category, userId }) => {
             {category.courses.map(course => (
               <li key={course.id} className="mb-4">
                 <Link href={`/course/${course.id}`}>
-                  <p className="block bg-green-100 hover:bg-green-400 rounded-lg p-4 transition duration-300">
+                  <p className="block bg-blue-100 hover:bg-blue-400 rounded-lg p-4 transition duration-300">
                     <div className="flex items-center mb-2">
                       <Image
                         src={course.thumbnail}

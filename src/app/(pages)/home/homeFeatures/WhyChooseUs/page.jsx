@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import Lottie from "react-lottie";
 import animationData from "./ani.json"; // Import your Lottie animation JSON file
 
@@ -14,7 +15,7 @@ const BootCamp = () => {
   });
 
   const heroSectionStyle = {
-    backgroundColor: "#D3F4A1", // Light lime green background color
+    backgroundColor: "#001219", // Light lime blue background color
     minHeight: "100vh", // Full viewport height
     display: "flex",
     flexDirection: "column",
@@ -70,10 +71,10 @@ const BootCamp = () => {
   };
 
   const boxStyle = {
-    width: "150px", // Adjust width of each box
+    width: "160px", // Adjust width of each box
     height: "150px", // Adjust height of each box
     backgroundColor: "#333", // Background color of each box (adjust as needed)
-    color: "#000", // Text color (black)
+    color: "#fff", // Text color (white)
     borderRadius: "8px", // Rounded corners
     display: "flex",
     justifyContent: "center",
@@ -125,7 +126,7 @@ const BootCamp = () => {
         transition={{ delay: 0.2, duration: 0.8, type: "spring", stiffness: 100 }}
         style={{ fontSize: "3rem", color: "#333", marginBottom: "20px" }}
       >
-      <u> WHY CHOOSE US🤔</u>
+      <h1 className="text-5xl mx-auto font-bold text-white mb-0 text-center">Why Choose Us </h1>
       </motion.h1>
 
       <div style={mainContainerStyle}>
@@ -139,42 +140,41 @@ const BootCamp = () => {
         </div>
 
        {/* Video Card */}
-<div style={videoCardStyle}>
-  <iframe
-    title={currentVideo.title}
-    width="100%"
-    height="250"
-    src={currentVideo.src} // Dynamic source based on clicked box
-    frameBorder="0"
-    allowFullScreen
-    style={{ borderRadius: "8px 8px 0 0", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
-  ></iframe>
-  <div style={{ padding: "20px" }}>
-    <h2 style={{ fontSize: "1.8rem", margin: "0", color: "#333", fontWeight: "bold" }}>{currentVideo.title}</h2>
-    <p style={{ fontSize: "1.2rem", margin: "5px 0 0", color: "#666" }}>{currentVideo.by}</p>
-   
-  </div>
-</div>
+        <div style={videoCardStyle}>
+          <iframe
+            title={currentVideo.title}
+            width="100%"
+            height="250"
+            src={currentVideo.src} // Dynamic source based on clicked box
+            frameBorder="0"
+            allowFullScreen
+            style={{ borderRadius: "8px 8px 0 0", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
+          ></iframe>
+          <div style={{ padding: "20px" }}>
+            <h2 style={{ fontSize: "1.8rem", margin: "0", color: "#fff", fontWeight: "bold" }}>{currentVideo.title}</h2>
+            <p style={{ fontSize: "1.2rem", margin: "5px 0 0", color: "#ccc" }}>{currentVideo.by}</p>
+          </div>
+        </div>
 
         {/* Three Rectangle Boxes */}
         <div style={boxContainerStyle}>
           <div
-            style={{ ...boxStyle, backgroundColor: "#FF6B6B", ...boxHoverStyle }}
+            style={{ ...boxStyle, backgroundColor: "#005f73" }}
             onClick={box1Clicked}
           >
-           🔍 24/7 Doubt Support
+            24/7 Doubt Support
           </div>
           <div
-            style={{ ...boxStyle, backgroundColor: "#6BFFB8", ...boxHoverStyle }}
+            style={{ ...boxStyle, backgroundColor: "#0a9396" }}
             onClick={box2Clicked}
           >
-           🏕️ Live Webinar & BootCamps
+            Live Webinar & BootCamps
           </div>
           <div
-            style={{ ...boxStyle, backgroundColor: "#6B8CFF", ...boxHoverStyle }}
+            style={{ ...boxStyle, backgroundColor: "#94d2bd" }}
             onClick={box3Clicked}
           >
-           💼 Projects Assistance
+            Projects Assistance
           </div>
         </div>
       </div>
