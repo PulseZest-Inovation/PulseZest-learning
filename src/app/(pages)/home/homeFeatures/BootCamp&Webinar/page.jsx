@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import WebinarContent from './features/BootCampContent';
+"use client"
+
+import React, { useState } from 'react';
 import BootCampContent from './features/WebinarContent';
 
 const App = () => {

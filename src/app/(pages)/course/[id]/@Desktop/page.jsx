@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link'; // Import Link from Next.js for navigation
 import { useAuthState } from 'react-firebase-hooks/auth'; // Firebase auth hook
-import { auth } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
-import fetchCourseData from '../Function/fetchCourseData'; // Adjust the import path as per your project structure
+import { auth, db } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
+import Link from 'next/link'; // Import Link from Next.js for navigation
 
 export default function CourseDesktopScreen({ params }) {
   const { id } = params; // Destructure id from params
   const [user, loading, error] = useAuthState(auth); // Fetch user state from Firebase auth
+
+  console.log(user?.uid);
 
   const [courseData, setCourseData] = useState({
     courseName: '',
@@ -27,6 +29,8 @@ export default function CourseDesktopScreen({ params }) {
     language: '',
     rating: '',
   });
+  
+  const [isPurchased, setIsPurchased] = useState(false); // State to check if the course is purchased
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,10 +38,19 @@ export default function CourseDesktopScreen({ params }) {
       if (data) {
         setCourseData(data);
       }
+
+      if (user) {
+        // Fetch user-specific data to check course purchase
+        const userCourseRef = doc(db, 'users', user.uid, 'courses', id);
+        const userDoc = await getDoc(userCourseRef);
+        if (userDoc.exists()) {
+          setIsPurchased(true); // Set course as purchased if found in Firestore
+        }
+      }
     };
 
     fetchData();
-  }, [id]);
+  }, [id, user]);
 
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -138,11 +151,19 @@ export default function CourseDesktopScreen({ params }) {
                 <span className="relative z-10">Newly Launched</span>
               </div>
             </div>
-            <Link href={`/${id}/checkout`} passHref>
-              <p onClick={handleEnrollClick} className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
-                {user ? 'Enroll Now' : 'Enroll Now'}
-              </p>
-            </Link>
+            {isPurchased ? (
+              <Link href={`/dashboard`} passHref>
+                <p className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                  Dashboard
+                </p>
+              </Link>
+            ) : (
+              <Link href={`/${id}/checkout`} passHref>
+                <p onClick={handleEnrollClick} className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                  Enroll Now
+                </p>
+              </Link>
+            )}
           </div>
 
           <br />
@@ -187,4 +208,3 @@ export default function CourseDesktopScreen({ params }) {
     </div>
   );
 }
-

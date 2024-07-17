@@ -1,3 +1,6 @@
+import React from 'react';
+import Image from 'next/image';
+
 // Custom styles for glowing text
 const glowingTextStyle = {
   color: '#1F2937', // Darker shade for better contrast
@@ -91,23 +94,26 @@ const CoursePage = () => {
           </tbody>
         </table>
       </div>
+     
+        {/* Progress Bars */}
+       
+        <div style={progressBarContainerStyle}>
+        <p style={{ color: '#3a3a3a', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
+  <img 
+    src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/2.png?alt=media&token=861cd93c-8d97-4ce5-b6e0-1de3dc4bd509" 
+    style={{ height: '2em', width: '2em', marginRight: '0.5em' }} 
+    alt="PulseZest logo" 
+  /> 
+  PulseZest-Learning
+</p>
 
-      {/* Progress Bars */}
-      <div style={progressBarContainerStyle}>
-        <p style={{ color: '#ffff', marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
-          <img 
-            src="1.png" 
-            style={{ height: '2em', width: '2em' }} 
-            alt="PulseZest logo" 
-          /> 
-          PulseZest-Learning
-        </p>
-        <div style={progressBar1Style}>95%</div>
-        <p style={{ color: '#ffff', marginBottom: '10px', marginTop:'20px', marginLeft:'10px'
- }}>Others</p>
-        <div style={progressBar2Style}>45%</div>
-      </div>
-      </div>
+          <div style={progressBar1Style}>95%</div>
+        </div>
+        <div style={progressBarContainerStyle}>
+        <p  style={{ color: '#3a3a3a'}}>Others</p>
+          <div style={progressBar2Style}>45%</div>
+        </div>
+    </div>
   );
 }
 

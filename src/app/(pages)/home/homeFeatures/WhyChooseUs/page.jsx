@@ -1,3 +1,6 @@
+"use client"
+
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Lottie from "react-lottie";
