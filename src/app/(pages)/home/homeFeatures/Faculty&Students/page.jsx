@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useState } from 'react';
 import Profile1 from '../../../../../assets/profile/1.jpeg';
 import Profile2 from '../../../../../assets/profile/2.png';
 import Profile3 from '../../../../../assets/profile/3.jpg';
