@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import Lottie from "react-lottie";
 import animationData from "./ani.json"; // Import your Lottie animation JSON file
 
