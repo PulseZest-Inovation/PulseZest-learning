@@ -46,7 +46,7 @@ const Header = () => {
     <header className="bg-black text-white-800 shadow-md relative">
       <div className="container mx-auto flex justify-between items-center px-4 py-3 md:py-4">
         <div className="text-2xl font-extrabold">
-          <Link href="/">
+          <Link href="/home">
             <div className="flex items-center space-x-2 cursor-pointer">
               <Image src={Logo} alt="Company Logo" className="h-10 mr-2" width={40} height={40} />
               <span className="text-white-400">PulseZest-Learning</span>

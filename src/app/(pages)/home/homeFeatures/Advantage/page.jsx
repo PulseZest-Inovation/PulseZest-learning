@@ -94,7 +94,7 @@ const CoursePage = () => {
 
       {/* Progress Bars */}
       <div style={progressBarContainerStyle}>
-        <p style={{ color: '#ffff', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
+        <p style={{ color: '#ffff', marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
           <img 
             src="1.png" 
             style={{ height: '2em', width: '2em' }} 
@@ -103,13 +103,11 @@ const CoursePage = () => {
           PulseZest-Learning
         </p>
         <div style={progressBar1Style}>95%</div>
-      </div>
-      <div style={progressBarContainerStyle}>
-        <p style={{ color: '#ffff', marginBottom: '30px'
+        <p style={{ color: '#ffff', marginBottom: '10px', marginTop:'20px', marginLeft:'10px'
  }}>Others</p>
         <div style={progressBar2Style}>45%</div>
       </div>
-    </div>
+      </div>
   );
 }
 
