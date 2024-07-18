@@ -1,7 +1,9 @@
 "use client"
 
-import React, { useState } from 'react';
-import BootCampContent from './features/WebinarContent';
+import { useState } from 'react';
+import BootCampContent from './features/BootCampContent';
+import WebinarContent from './features/WebinarContent';
+
 
 const App = () => {
   const [selectedOption, setSelectedOption] = useState('BootCamp');
@@ -11,7 +13,7 @@ const App = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ backgroundColor: '#ced4da', minHeight: '100vh', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 <nav style={{
   backgroundColor: '#001524',
   padding: '10px 0',

@@ -1,6 +1,3 @@
-import React from 'react';
-import Image from 'next/image';
-
 // Custom styles for glowing text
 const glowingTextStyle = {
   color: '#1F2937', // Darker shade for better contrast
@@ -18,11 +15,15 @@ const animatedTableStyle = {
 
 const progressBarContainerStyle = {
   width: '80%',
-  margin: '20px auto',
-  backgroundColor: '#023047', // Lighter gray for better contrast
+  margin: '10px auto',
+  backgroundColor: '#023047',
   borderRadius: '10px',
+  color: '#ffffff',
   padding: '10px',
   textAlign: 'left',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '5px', // Added gap to manage spacing between progress bars
 };
 
 const progressBarStyle = {
@@ -36,20 +37,23 @@ const progressBarStyle = {
 
 const progressBar1Style = {
   ...progressBarStyle,
-  backgroundImage: 'linear-gradient(to right, #3B82F6, #60A5FA, #93C5FD)', // Gradient with shades of blue
+  backgroundImage: 'linear-gradient(to right, #3B82F6, #60A5FA, #93C5FD)',
   width: '95%', // Percentage filled
+  marginLeft: '8px'
 };
 
 const progressBar2Style = {
   ...progressBarStyle,
   backgroundColor: '#9CA3AF', // Gray for better contrast
   width: '45%', // Percentage filled
+  marginTop: '20px',
+  marginRight: '25px'
 };
 
 const CoursePage = () => {
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center', padding: '20px', backgroundColor: '#F9FAFB', minHeight: '100vh' }}>
-              <h1 className="text-5xl font-bold text-blue-900 mb-9">Advantages of PulseZest-Learning</h1> {/* Updated text color */}
+      <h1 className="text-5xl font-bold text-blue-900 mb-9">Advantages of PulseZest-Learning</h1> {/* Updated text color */}
       <div style={{ width: '80%', margin: '20px auto', backgroundColor: '#ffffff', borderRadius: '10px', padding: '20px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', ...animatedTableStyle }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -94,25 +98,23 @@ const CoursePage = () => {
           </tbody>
         </table>
       </div>
-     
-        {/* Progress Bars */}
-       
-        <div style={progressBarContainerStyle}>
-        <p style={{ color: '#3a3a3a', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
-  <img 
-    src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/2.png?alt=media&token=861cd93c-8d97-4ce5-b6e0-1de3dc4bd509" 
-    style={{ height: '2em', width: '2em', marginRight: '0.5em' }} 
-    alt="PulseZest logo" 
-  /> 
-  PulseZest-Learning
-</p>
 
-          <div style={progressBar1Style}>95%</div>
+      {/* Progress Bars */}
+      <div style={progressBarContainerStyle}>
+        <p style={{ color: '#ffffff', marginBottom: '30px', display: 'flex', alignItems: 'center' }}>
+          <img 
+            src="1.png" 
+            style={{ height: '2em', width: '2em', marginRight: '0.5em', color: 'white' }} 
+            alt="PulseZest logo" 
+          /> 
+          PulseZest-Learning
+        </p>
+        <div style={progressBar1Style}>95%</div>
+        <div style={{ ...progressBarContainerStyle, margin: '0' }}>
+        <p style={{ color: '#ffffff' }}>Others</p>
+        <div style={progressBar2Style}>45%</div>
         </div>
-        <div style={progressBarContainerStyle}>
-        <p  style={{ color: '#3a3a3a'}}>Others</p>
-          <div style={progressBar2Style}>45%</div>
-        </div>
+      </div>
     </div>
   );
 }

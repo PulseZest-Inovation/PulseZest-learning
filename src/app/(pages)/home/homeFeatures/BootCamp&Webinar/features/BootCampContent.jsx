@@ -25,7 +25,7 @@ const SidebarContainer = styled.div`
 
 const SidebarButton = styled.button`
   background-color: grey;
-  color: white;
+  color: #001524;
   padding: 10px;
   font-size: 1.2rem;
   border: none;
