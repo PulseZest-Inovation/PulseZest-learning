@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { HomeIcon, BookOpenIcon, UserIcon, BellIcon,   DocumentSearchIcon } from '@heroicons/react/outline';
+import { BellIcon, BookOpenIcon, DocumentSearchIcon, HomeIcon, UserIcon } from '@heroicons/react/outline';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function BottomNavigationBar() {
   const router = useRouter();
@@ -14,7 +13,7 @@ export default function BottomNavigationBar() {
 
   const getButtonClasses = (path) => {
     return `flex flex-col items-center ${
-      pathname === path ? 'text-green-600' : 'text-gray-600 hover:text-green-600'
+      pathname === path ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
     } transition-colors`;
   };
 

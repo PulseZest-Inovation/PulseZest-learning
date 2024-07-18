@@ -12,8 +12,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AgreeMent from '../../../../components/courseComponents/terms-of-service/page';
+import TermsOfService from '../../../../components/courseComponents/terms-of-service/page';
 import axios from 'axios'; // Import Axios for making HTTP requests
+import Image from 'next/image';
+import Avatar from "../../../../assets/image/boy.png";
 
 const steps = ['Login', 'Agreement', 'Payment']; // Define steps for the Stepper
 
@@ -23,6 +25,7 @@ const CheckoutPage = ({ params }) => {
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const { id } = params;
+  const [agreed, setAgreed] = useState(false);
 
   const fetchUserData = async (userId) => {
     try {
@@ -77,12 +80,15 @@ const CheckoutPage = ({ params }) => {
       setActiveStep(1); // Move to step 1 after login
     } catch (error) {
       console.error(error);
+      toast.error('Failed to log in. Please try again.', { autoClose: 3000 });
     }
   };
 
   const handleNext = () => {
     if (!user && activeStep > 0) {
       toast.error('Please log in to proceed!', { autoClose: 3000 });
+    } else if (activeStep === steps.length - 1) {
+      handlePayment();
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -98,7 +104,7 @@ const CheckoutPage = ({ params }) => {
       const email = userData ? userData.email : ''; // Fetch from user data if available
       const phone = ''; // Replace with actual phone number logic if needed
 
-      const response = await axios.post('http://localhost:3001/api/createOrder', { // Changed port to 3001
+      const response = await axios.post('https://server-api-green.vercel.app/api/createOrder', {
         amount: courseData.salePrice * 100, // Amount in paisa (e.g., ₹100 = 10000 paisa)
         currency: 'INR', // Adjust based on your currency
         receipt: 'receipt#1', // Replace with your own receipt logic
@@ -113,7 +119,7 @@ const CheckoutPage = ({ params }) => {
         order_id: data.id,
         name: 'PulseZest-Learning',
         description: 'Course Payment',
-        image: 'https://via.placeholder.com/150', // Replace with your logo URL
+        image: 'https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/logo.png?alt=media&token=208465a0-63ae-4999-9c75-cf976af6a616', // Replace with your logo URL
         handler: async function (response) {
           console.log('Payment success:', response);
 
@@ -130,6 +136,10 @@ const CheckoutPage = ({ params }) => {
           });
 
           toast.success('Payment successful! Course access granted.', { autoClose: 3000 });
+
+          // Redirect to home page after successful payment
+          // Replace with your router's redirection logic
+          window.location.href = '/home';
         },
         prefill: {
           name,
@@ -162,6 +172,10 @@ const CheckoutPage = ({ params }) => {
     };
   }, []);
 
+  const handleAgreement = () => {
+    setAgreed(true); // Set agreed state to true
+  };
+
   const renderStepContent = (stepIndex) => {
     switch (stepIndex) {
       case 0:
@@ -193,8 +207,11 @@ const CheckoutPage = ({ params }) => {
           <>
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               This is the agreement step where users need to agree to the terms and conditions.
-              <AgreeMent />
+              <TermsOfService />
             </Typography>
+            <Button variant="contained" color="primary" onClick={handleAgreement} style={{ marginBottom: '10px', backgroundColor: '#4CAF50' }}>
+              I Understand
+            </Button>
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               {user ? 'Please agree to the terms and conditions to proceed.' : 'Please log in to proceed.'}
             </Typography>
@@ -206,7 +223,6 @@ const CheckoutPage = ({ params }) => {
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               This is the payment step where users can complete their payment.
             </Typography>
-            <Button variant="contained" color="primary" onClick={handlePayment} style={{ backgroundColor: '#4CAF50' }}>Pay Now</Button>
           </>
         );
       default:
@@ -215,13 +231,14 @@ const CheckoutPage = ({ params }) => {
   };
 
   return (
-    <div className="checkout-page" style={{ backgroundColor: '#ffffff', color: '#333333', minHeight: '100vh', padding: '20px' }}>
-      <Typography variant="h4" align="center" style={{ marginBottom: '20px', color: '#4CAF50' }}>
-        Checkout Page
-      </Typography>
+    <div className="checkout-page" style={{ backgroundColor: '#457fe5', color: '#333333', minHeight: '100vh', padding: '20px' }}>
+      
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
         {/* Left Side - Stepper and Details */}
         <div style={{ flex: '1 1 50%', border: '1px solid #ddd', borderRadius: '8px', padding: '20px', backgroundColor: '#f0f0f0' }}>
+          <Typography variant="h4" align="center" style={{ marginBottom: '20px', color: '#4CAF50' }}>
+            Checkout Page
+          </Typography>
           <Typography variant="h5" style={{ marginBottom: '20px', color: '#4CAF50' }}>Checkout Steps</Typography>
 
           {/* Stepper */}
@@ -245,29 +262,47 @@ const CheckoutPage = ({ params }) => {
 
           {/* Navigation Buttons */}
           <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
-            <Button disabled={activeStep === 0 || (activeStep === 1 && !user)} onClick={handleBack} variant="outlined" style={{ color: '#4CAF50', borderColor: '#4CAF50' }}>Back</Button>
-            <Button disabled={!user} variant="contained" color="primary" onClick={handleNext} style={{ backgroundColor: '#4CAF50' }}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            <Button disabled={activeStep === 0 || (activeStep === 1 && (!user || !agreed))} onClick={handleBack} variant="outlined" style={{ color: '#4CAF50', borderColor: '#4CAF50' }}>Back</Button>
+            <Button
+              disabled={!user || (activeStep === 1 && !agreed)} // Disable if not agreed in step 1
+              variant="contained"
+              color="primary"
+              onClick={handleNext}
+              style={!user || (activeStep === 1 && !agreed) ? { backgroundColor: '#ddd', cursor: 'not-allowed' } : { backgroundColor: '#4CAF50' }}
+            >
+              {activeStep === steps.length - 1 ? 'Pay Now' : 'Next'}
             </Button>
           </div>
         </div>
 
         {/* Right Side - Course and Student Details */}
-        <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '20px', backgroundColor: '#f0f0f0' }}>
             <Typography variant="h5" style={{ marginBottom: '20px', color: '#4CAF50' }}>Course Details</Typography>
-            <strong>Course Id: {id}</strong>
             {courseData ? (
               <>
-                <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
-                  <strong>Title:</strong> {courseData.name}
-                </Typography>
-                <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
-                  <strong>Instructor:</strong> Rishab Chauhan
-                </Typography>
-                <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                  <strong>Description:</strong> {courseData.description}
-                </Typography>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                  <Image 
+                    src={courseData.thumbnail} 
+                    alt="Course Logo" 
+                    width= {52} height= {52}
+                    style={{ marginRight: '10px', borderRadius: '50%' }} 
+                  />
+                  <div>
+                    <Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+                      <strong>Course ID:</strong> {id}
+                    </Typography>
+                    <Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+                      <strong>Title:</strong> {courseData.name}
+                    </Typography>
+                    <Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+                      <strong>Instructor:</strong> Rishab Chauhan
+                    </Typography>
+                    <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                      <strong>Description:</strong> {courseData.description}
+                    </Typography>
+                  </div>
+                </div>
               </>
             ) : (
               <Typography variant="body1">Loading...</Typography>
@@ -278,16 +313,23 @@ const CheckoutPage = ({ params }) => {
           {userData && (
             <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '20px', backgroundColor: '#f0f0f0' }}>
               <Typography variant="h5" style={{ marginBottom: '20px', color: '#4CAF50' }}>Student Details</Typography>
-              <strong>Student Id: {user.uid} </strong>
-              <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
-                <strong>Name: {userData.name}</strong>
-              </Typography>
-              <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
-                <strong>Email:{userData.email}</strong>
-              </Typography>
-              <Typography variant="subtitle1" style={{ marginBottom: '10px' }}>
-                <strong>Suid:{userData.suid}</strong>
-              </Typography>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                <Image src={Avatar} alt="Student Avatar" width={52} height={52} style={{ marginRight: '10px', borderRadius: '50%' }} />
+                <div>
+                  <Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+                    <strong>Student ID:</strong> {userData.uid}
+                  </Typography>
+                  <Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+                    <strong>Student Name:</strong> {userData.name}
+                  </Typography>
+                  <Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+                    <strong>Student Email:</strong> {userData.email}
+                  </Typography>
+                  <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                    <strong>Student SUID:</strong> {userData.suid}
+                  </Typography>
+                </div>
+              </div>
             </div>
           )}
         </div>

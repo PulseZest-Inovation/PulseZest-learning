@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./HeroSection.css"; // Import your custom CSS for styling
 
 const HeroSection = () => {
@@ -8,16 +8,9 @@ const HeroSection = () => {
     const coursesRef = useRef(null);
 
     const spiderStyle = {
-        position: "absolute",
         top: `${mousePosition.y}px`,
         left: `${mousePosition.x}px`,
-        width: "50px", // Adjust size as needed
-        height: "50px",
         backgroundImage: "url('https://clipart-library.com/images/kiMb8barT.png')", // Replace with the URL of your spider or spider web image
-        backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
-        pointerEvents: "none", // Ensures the spider does not interfere with mouse events
-        transform: "translate(-50%, -50%)", // Center the spider on the cursor
     };
 
     useEffect(() => {
@@ -61,14 +54,10 @@ const HeroSection = () => {
                 <div className="wave"></div>
             </div>
             <div className="content-box">
-                <h1 className="hero-title">Welcom To King Learning</h1>
-                <p className="hero-text">READY TO DIVE 🔮 FOR EXPLORE MORE🍀</p>
+                <h1 className="hero-title">Welcome To King Learning</h1>
+                <p className="hero-text">Ready To Dive For Explore More</p>
                 <button className="hero-button" onClick={handleExploreCourses}>Explore Courses</button>
-                <div style={spiderStyle}></div>
-            </div>
-            <div ref={coursesRef} className="courses-section">
-                {/* Content of your courses section */}
-               
+                <div className="spider" style={spiderStyle}></div>
             </div>
         </div>
     );

@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import Boy from '../../../../../../assets/image/boy.png';
 import Image from 'next/image';
+import styled from 'styled-components';
 import Pro from '../../../../../../assets/image/avatar-design.png';
+import Boy from '../../../../../../assets/image/boy.png';
+
 const Container = styled.div`
   display: flex;
   width: 1200px;
@@ -10,11 +10,11 @@ const Container = styled.div`
   left: -290px;
   justify-content: center;
   padding: 50px;
-  background-color: #99CE3E;
+  background-color: #151b25; /* Updated background color */
 `;
 
 const Card = styled.div`
-  background-color: #1c1c1e;
+  background-color: #124559; /* Updated card color */
   color: white;
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -27,7 +27,7 @@ const Card = styled.div`
 const Label = styled.div`
   position: absolute;
   top: 10px;
-  left: 2px;
+  left: 6px;
   background-color: ${props => props.bgColor || '#ff5700'};
   color: white;
   border-radius: 10px;
@@ -63,7 +63,7 @@ const InfoList = styled.ul`
 
 const ExploreButton = styled.button`
   background-color: white;
-  color: #51CE3E;
+  color: #58b4d1;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -72,7 +72,7 @@ const ExploreButton = styled.button`
   width: 100%;
   margin-top: 20px;
   &:hover {
-    background-color: #51CE3E;
+    background-color: #58b4d1;
     color: white ;
   }
 `;
@@ -107,13 +107,10 @@ const CardImage = styled.div`
 const App = () => {
   return (
     <>
-      <Header>
-      
-        <h1>🚀 Enhanced courses for exponential growth in skills 🚀</h1>
-      </Header>
-      <Container>
+<h1 className="text-4xl mx-auto font-bold text-blue-900 mb-9 text-center">Enhanced Courses for Exponential Growth in Skills</h1>
+<Container>
         <Card>
-          <Label bgColor="#ff6f61">Newly launched for students 🎓</Label>
+          <Label bgColor="#8a5a44">Newly Launched for Students</Label>
           <CardImage>
             <Image src={Boy} alt="Avatar" />
           </CardImage>
@@ -127,7 +124,7 @@ const App = () => {
           <ExploreButton>Explore Offers</ExploreButton>
         </Card>
         <Card>
-          <Label bgColor="#2196f3">For professionals 👨‍💼</Label>
+          <Label bgColor="#2b2d42">For Professionals</Label>
           <CardImage>
             <Image src={Pro} alt="Avatar" />
           </CardImage>

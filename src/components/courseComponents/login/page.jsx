@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Button, Container, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { auth, firestore } from '../../../utils/Firebase/firebaseConfig';
+import { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Container, Typography, TextField, Button, IconButton, InputAdornment } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { auth, firestore } from '../../../utils/Firebase/firebaseConfig';
 
 const LoginPage = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -78,9 +78,8 @@ const LoginPage = ({ onLogin }) => {
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
           maxWidth: '29rem',
           position: 'relative',
-          width: '250%',
-          left: '-8%',
-          marginTop: '-250px',
+          width: '300px',
+          marginTop: '-220px',
         }}
       >
         <Typography variant="h4" style={{ fontWeight: 'bold', marginBottom: '1rem', textAlign: 'center' }}>

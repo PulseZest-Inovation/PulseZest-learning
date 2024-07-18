@@ -3,8 +3,7 @@ import Image from 'next/image';
 
 const Footer = () => {
   const footerStyle = {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    backgroundImage: 'url("https://img.freepik.com/free-vector/green-shaded-mountains-landscape_23-2148272400.jpg?w=740&t=st=1720724485~exp=1720725085~hmac=8015c97706a83ef6bd366616226d90eddcb3dd69409fa76bb8a624cdb8c56b80")',
+    backgroundColor: 'black',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     color: '#ffffff',
@@ -15,7 +14,15 @@ const Footer = () => {
     maxWidth: '1200px',
     margin: '0 auto',
     padding: '20px',
-    position: 'relative', // Ensure relative positioning for child elements
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+  };
+
+  const footerContentStyle = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   };
 
   const sectionStyle = {
@@ -41,7 +48,7 @@ const Footer = () => {
   };
 
   const headingStyle = {
-    color: '#00ff00',
+    color: '#a1c5e7',
     fontSize: '1.1rem',
     marginBottom: '10px',
   };
@@ -61,40 +68,23 @@ const Footer = () => {
   };
 
   const contactInfoStyle = {
-    marginTop: '20px',
     display: 'flex',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: '20px',
+    alignItems: 'center',
   };
 
   const contactItemStyle = {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '10px',
-    justifyContent: 'space-between',
-    width: '100%', // Ensures the items span the entire width
+    gap: '10px',
   };
-
-  const labelStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    marginRight: '10px', // Adjust spacing between icon and text
-  };
-
-  const spanStyle = {
-    flex: '1', // Ensures the middle span takes up remaining space
-    margin: '0 -140px', // Adjust spacing around the middle span
-  };
-
-
-
-
-
 
   return (
-    <div>
     <footer style={footerStyle}>
       <div style={containerStyle}>
-        <div className="footer-content" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+        <div className="footer-content" style={footerContentStyle}>
           <div style={sectionStyle}>
             <div style={logoStyle}>
               <Image src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/logo.png?alt=media&token=208465a0-63ae-4999-9c75-cf976af6a616" alt="Company Logo"  width={500} height={300} style={logoImgStyle} />
@@ -114,7 +104,7 @@ const Footer = () => {
             <ul style={ulStyle}>
               <li style={liStyle}><a href="#" style={linkStyle}>Bootcamp</a></li>
               <li style={liStyle}><a href="#" style={linkStyle}>Webinar</a></li>
-              <li style={liStyle}><a href="#" style={linkStyle}>Seminar</a></li> {/* Replace with icon and link */}
+              <li style={liStyle}><a href="#" style={linkStyle}>Seminar</a></li>
             </ul>
           </div>
           <div style={sectionStyle}>
@@ -134,24 +124,17 @@ const Footer = () => {
             </a>
           </div>
           <div style={contactItemStyle}>
-            <span style={spanStyle}>Copyright © 2024 PulseZest - by PulseZest</span>
+            <span>Copyright © 2024 PulseZest - by PulseZest</span>
+          </div>
+          <div style={contactItemStyle}>
             <a href="mailto:info@pulsezest.com" style={{ display: 'flex', alignItems: 'center', color: '#ffffff', textDecoration: 'none' }}>
               <Image src="https://files.codingninjas.com/email-fill-31846.svg" alt="Email Icon"  width={500} height={300} style={{ width: '20px', height: '20px', marginRight: '5px' }} />
               info@pulsezest.com
             </a>
           </div>
         </div>
-       
       </div>
     </footer>
-   {/* Grey Section with Double Text */}
-<div style={{ backgroundColor: '#0000', padding: '20px 0', textAlign: 'center' }}>
-  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', position: 'relative', display: 'inline-block' }}>
-          ⭐ PULSE ZEST LEARNING ⭐
- 
-  </div>
-</div>
-</div>
   );
 };
 

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { FaChalkboardTeacher, FaUserTie, FaBriefcase, FaQuestionCircle, FaVideo } from 'react-icons/fa';
 
 const BenefitsContainer = styled.div`
-  background-color: #0b0b45;
+  background-color: #012a4a;
   padding: 50px;
   color: white;
   font-family: Arial, sans-serif;
@@ -17,66 +18,72 @@ const BenefitsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const BenefitCard = styled.div`
-  background-color: #74FF5A;
+  background-color: #2a6f97;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
   gap: 10px;
 `;
 
-const Emoji = styled.span`
-  font-size: 1.5rem;
+const Icon = styled.div`
+  font-size: 2rem;
+  color: white;
 `;
 
 const BenefitTitle = styled.h3`
   font-size: 1.2rem;
-  color: #fffff;
+  color: white;
   margin: 0;
   font-weight: bold;
+  text-align: center;
 `;
 
 const BenefitDescription = styled.p`
   margin: 0;
   font-size: 0.9rem;
-  color: #fffff;
-  font-weight: bold
+  color: white;
+  text-align: center;
 `;
 
 const BenefitsSection = () => {
   return (
     <BenefitsContainer>
-      <Title>Job bootcamp benefits</Title>
+      <h1 className="text-5xl mx-auto font-bold text-white-900 mb-9 text-center">Job Bootcamp Benefits</h1>
       <BenefitsGrid>
         <BenefitCard>
-          <Emoji>👨‍🏫</Emoji>
-          <BenefitTitle>1:1 expert session</BenefitTitle>
+          <Icon><FaChalkboardTeacher /></Icon>
+          <BenefitTitle>1:1 Expert Session</BenefitTitle>
           <BenefitDescription>Connects theoretical understanding with practical implementation through their insights</BenefitDescription>
         </BenefitCard>
         <BenefitCard>
-          <Emoji>👨‍🎓</Emoji>
-          <BenefitTitle>Expert faculty with 15+ yrs of experience</BenefitTitle>
+          <Icon><FaUserTie /></Icon>
+          <BenefitTitle>Expert Faculty with 15+ Years of Experience</BenefitTitle>
           <BenefitDescription>Top-tier education enriched by practical knowledge and innovation</BenefitDescription>
         </BenefitCard>
         <BenefitCard>
-          <Emoji>💡</Emoji>
-          <BenefitTitle>Case studies to make you job ready</BenefitTitle>
+          <Icon><FaBriefcase /></Icon>
+          <BenefitTitle>Case Studies to Make You Job Ready</BenefitTitle>
           <BenefitDescription>Hands-on learning to spark creative problem-solving</BenefitDescription>
         </BenefitCard>
         <BenefitCard>
-          <Emoji>🤔</Emoji>
-          <BenefitTitle>Quick doubt support</BenefitTitle>
+          <Icon><FaQuestionCircle /></Icon>
+          <BenefitTitle>Quick Doubt Support</BenefitTitle>
           <BenefitDescription>Personalised assistance for a clear understanding of concepts</BenefitDescription>
         </BenefitCard>
         <BenefitCard>
-          <Emoji>📚</Emoji>
-          <BenefitTitle>Live classes</BenefitTitle>
+          <Icon><FaVideo /></Icon>
+          <BenefitTitle>Live Classes</BenefitTitle>
           <BenefitDescription>Learn by practice with instant feedback</BenefitDescription>
         </BenefitCard>
       </BenefitsGrid>
