@@ -2,12 +2,11 @@
 
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid';
 import { useEffect, useRef, useState } from 'react';
-
-
+import {doc, getDoc} from 'firebase/firestore'
 import Link from 'next/link'; // Import Link from Next.js for navigation
 import { useAuthState } from 'react-firebase-hooks/auth'; // Firebase auth hook
 import { auth, db } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
-import Link from 'next/link'; // Import Link from Next.js for navigation
+import fetchCourseData from '../Function/fetchCourseData';
 
 export default function CourseDesktopScreen({ params }) {
   const { id } = params; // Destructure id from params
