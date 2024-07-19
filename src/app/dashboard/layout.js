@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import Dashboard from './Dashboard';
 
-export default function ProfileLayout({ children, Phone,  Desktop }) {
+export default function DashboardLayout({ children,   }) {
   const [isPhone, setIsPhone] = useState(false);
 
   useEffect(() => {
@@ -22,5 +23,8 @@ export default function ProfileLayout({ children, Phone,  Desktop }) {
     };
   }, []);
 
-  return <div>{isPhone ? Phone : <></>}</div>;
+  return <div>
+    {isPhone ? <></> : <Dashboard/>}
+    {children}
+    </div>;
 }

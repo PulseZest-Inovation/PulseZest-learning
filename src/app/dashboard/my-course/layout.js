@@ -24,7 +24,7 @@ export default function HomescreenLayout({ children, Phone,  Desktop }) {
 
   return <div>
      
-    {isPhone ? Phone : Desktop}
+    {isPhone ? Phone : <></>}
  
     </div>;
 }

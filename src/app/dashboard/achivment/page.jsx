@@ -5,7 +5,7 @@ const AchievementsPage = () => {
 
   return (
     <div>
-      <h1>Achievements</h1>
+      <h1 className='text-5xl text-black'>Achievements</h1>
      
     </div>
   );

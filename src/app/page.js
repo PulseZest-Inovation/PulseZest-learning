@@ -5,16 +5,18 @@ import Header from '@/components/header/homeHeader/Header';
 import PageTransition from '@/components/PageTransition/pageTransition';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import LoadingGif from '../assets/gif/loading.gif'; // Ensure this path is correct
 
 const Home = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const pathname = usePathname();
 
   // Simulate loading delay (you can replace this with actual data fetching logic)
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, -1000); 
+    }, 1000); // Positive value for the delay
     return () => clearTimeout(timer);
   }, []);
 
@@ -44,9 +46,12 @@ const Home = ({ children }) => {
         <LoadingScreen />
       ) : (
         <div>
-          {isPhone ? <BottomNavigationBar  /> : <Header />}
+          {isPhone ? (
+            <BottomNavigationBar />
+          ) : (
+            !pathname.includes('/dashboard') && <Header />
+          )}
           <PageTransition>{children}</PageTransition>
-          
         </div>
       )}
     </div>
