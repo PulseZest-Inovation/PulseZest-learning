@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link'; // Import Link from Next.js for navigation
 import { useAuthState } from 'react-firebase-hooks/auth'; // Firebase auth hook
 import { auth, db } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
-import Link from 'next/link'; // Import Link from Next.js for navigation
 
 export default function CourseDesktopScreen({ params }) {
   const { id } = params; // Destructure id from params
