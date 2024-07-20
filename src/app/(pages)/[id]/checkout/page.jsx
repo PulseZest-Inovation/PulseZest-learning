@@ -139,7 +139,7 @@ const CheckoutPage = ({ params }) => {
 
           // Redirect to home page after successful payment
           // Replace with your router's redirection logic
-          window.location.href = '/home';
+          window.location.href = '/dashboard/my-course';
         },
         prefill: {
           name,
