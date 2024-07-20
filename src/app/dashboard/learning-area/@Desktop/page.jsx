@@ -5,7 +5,7 @@ import { db, auth } from '../../../../utils/Firebase/firebaseConfig';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Transition } from '@headlessui/react';
-import { FaPlay, FaVideo, FaMoon, FaSun, FaHome } from 'react-icons/fa';
+import { FaPlay, FaVideo, FaMoon, FaSun, FaHome, FaSearch } from 'react-icons/fa';
 
 const LearningAreaScreenLayout = () => {
     const [courses, setCourses] = useState([]);
@@ -13,6 +13,7 @@ const LearningAreaScreenLayout = () => {
     const [selectedTopic, setSelectedTopic] = useState(null);
     const [loading, setLoading] = useState(true);
     const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains('dark'));
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchCourses = async (uid) => {
@@ -66,6 +67,10 @@ const LearningAreaScreenLayout = () => {
         localStorage.setItem('darkMode', newDarkMode);
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value.toLowerCase());
+    };
+
     useEffect(() => {
         const savedDarkMode = localStorage.getItem('darkMode') === 'true';
         if (savedDarkMode !== darkMode) {
@@ -83,7 +88,7 @@ const LearningAreaScreenLayout = () => {
     }
 
     return (
-        <div className={`min-h-screen ${darkMode ? 'bg-dark-background text-dark-text' : 'bg-light-background text-light-text'}`}>
+        <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
             <div className="flex">
                 {/* Sidebar for Courses */}
                 <Transition
@@ -99,25 +104,37 @@ const LearningAreaScreenLayout = () => {
                         className={`w-1/4 p-4 shadow-lg rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-200'}`}
                         style={{ overflowY: 'auto' }}
                     >
-                        <h2 className="text-2xl font-bold mb-4 flex justify-between items-center">
-                            Courses
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Courses</h2>
                             <button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-600 hover:bg-gray-500">
                                 {darkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-blue-300" />}
                             </button>
-                        </h2>
+                        </div>
+                        <div className="relative mb-4">
+                            <input
+                                type="text"
+                                placeholder="Search courses..."
+                                className="w-full p-2 rounded-lg shadow-inner focus:outline-none"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                            />
+                            <FaSearch className="absolute top-2 right-3 text-gray-500" />
+                        </div>
                         {courses.length === 0 ? (
                             <p className="text-gray-400">No courses available</p>
                         ) : (
-                            courses.map((course, index) => (
-                                <div
-                                    key={index}
-                                    className={`mb-4 p-3 rounded-lg cursor-pointer transition-transform duration-300 transform hover:scale-105 ${selectedCourse?.id === course.id ? 'bg-blue-700 border-l-4 border-blue-400' : 'hover:bg-gray-700'}`}
-                                    onClick={() => handleCourseClick(course)}
-                                >
-                                    <img src={course.thumbnail || 'https://via.placeholder.com/150'} alt={course.name} className="w-full h-32 object-cover rounded-md mb-2" />
-                                    <h3 className="text-lg font-bold">{course.name}</h3>
-                                </div>
-                            ))
+                            courses
+                                .filter((course) => course.name.toLowerCase().includes(searchQuery))
+                                .map((course, index) => (
+                                    <div
+                                        key={index}
+                                        className={`mb-4 p-3 rounded-lg cursor-pointer transition-transform duration-300 transform hover:scale-105 ${selectedCourse?.id === course.id ? 'bg-blue-700 border-l-4 border-blue-400' : 'hover:bg-gray-700'}`}
+                                        onClick={() => handleCourseClick(course)}
+                                    >
+                                        <img src={course.thumbnail || 'https://via.placeholder.com/150'} alt={course.name} className="w-full h-32 object-cover rounded-md mb-2" />
+                                        <h3 className="text-lg font-bold">{course.name}</h3>
+                                    </div>
+                                ))
                         )}
                     </div>
                 </Transition>
@@ -137,7 +154,21 @@ const LearningAreaScreenLayout = () => {
                                         selectedTopic.videoLinks.length > 0 ? (
                                             selectedTopic.videoLinks.map((videoLink, videoIndex) => (
                                                 <div key={videoIndex} className="mb-4">
-                                                    <video controls className="w-full h-64 object-cover rounded-lg shadow-lg">
+                                                    <video
+                                                        controls
+                                                        className="w-full h-64 object-cover rounded-lg shadow-lg"
+                                                        disablePictureInPicture
+                                                        onContextMenu={(e) => e.preventDefault()}
+                                                        controlsList="nodownload noremoteplayback noplaybackrate noautohide"
+                                                        onPlay={(e) => {
+                                                            const video = e.target;
+                                                            video.addEventListener('timeupdate', () => {
+                                                                if (video.currentTime > video.duration - 2) {
+                                                                    video.currentTime = video.duration - 2;
+                                                                }
+                                                            });
+                                                        }}
+                                                    >
                                                         <source src={videoLink} type="video/mp4" />
                                                         Your browser does not support the video tag.
                                                     </video>
@@ -184,8 +215,7 @@ const LearningAreaScreenLayout = () => {
 const Breadcrumbs = ({ course }) => (
     <nav className="bg-gray-900 rounded-md w-full mb-4">
         <ol className="list-reset flex text-white">
-           
-          
+         
             <li><a href="#" className="text-gray-400">{course}</a></li>
         </ol>
     </nav>
