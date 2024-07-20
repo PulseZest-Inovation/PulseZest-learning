@@ -65,7 +65,7 @@ const Header = () => {
           {/* Conditional rendering based on user state */}
           {user ? (
             <div className="relative">
-              <Link href={`/${user.name}/dashboard`}>
+              <Link href={`/dashboard/my-course`}>
                 <p className="glitch-button"
                   style={{
                     padding: '15px 25px',
