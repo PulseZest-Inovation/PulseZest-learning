@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaBook, FaChartLine, FaCog, FaUser } from 'react-icons/fa';
 import { useRouter } from 'next/navigation'; // For programmatic navigation
+import { db, auth } from '../../utils/Firebase/firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 import Header from './Header';
 import NotificationDesktopScreen from './notification/layout';
 import DesktopMyCourses from './my-course/@Desktop/page';
@@ -12,6 +15,7 @@ import SettignDesktopPage from './setting/@Desktop/page';
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('courses');
   const [isDesktop, setIsDesktop] = useState(true);
+  const [username, setUsername] = useState(''); // State to hold the username
   const router = useRouter(); // Initialize the router for navigation
 
   useEffect(() => {
@@ -23,6 +27,30 @@ const Dashboard = () => {
     window.addEventListener('resize', handleResize); // Add resize event listener
 
     return () => window.removeEventListener('resize', handleResize); // Cleanup listener on unmount
+  }, []);
+
+  useEffect(() => {
+    const fetchUserName = async (uid) => {
+      try {
+        const userDoc = doc(db, 'users', uid);
+        const userSnapshot = await getDoc(userDoc);
+        if (userSnapshot.exists()) {
+          setUsername(userSnapshot.data().name || ''); // Fetch and set username
+        }
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchUserName(user.uid);
+      } else {
+        setUsername('');
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -66,7 +94,7 @@ const Dashboard = () => {
     <div className="flex min-h-screen bg-gray-100">
       <div className="w-1/6 bg-gradient-to-r from-purple-500 to-indigo-600 text-white flex flex-col">
         <div className="p-6 text-3xl font-extrabold">PulseZest</div>
-        <div className="user">Welcome 👋🏻 {'username'}</div>
+        <div className="user">Welcome 👋🏻 {username}</div>
         <div className="flex flex-col mt-8 space-y-4">
           <button
             onClick={() => handleTabChange('my-course')}

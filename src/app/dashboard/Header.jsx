@@ -13,7 +13,6 @@ const Header = ({ setActiveTab }) => {
   ];
 
   const handleNotificationsClick = () => {
-    setActiveTab('notifications');
     setShowNotifications(!showNotifications);
   };
 
@@ -24,11 +23,9 @@ const Header = ({ setActiveTab }) => {
   };
 
   useEffect(() => {
-    // Add event listener for clicks outside of notifications box
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      // Clean up the event listener
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
