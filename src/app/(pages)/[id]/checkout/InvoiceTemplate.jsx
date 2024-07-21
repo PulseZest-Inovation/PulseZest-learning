@@ -57,10 +57,19 @@ const checkIfInvoiceExists = async (userId, courseId) => {
   return !invoiceDocs.empty;
 };
 
+let isGeneratingInvoice = false; // Flag to prevent multiple saves
+
 const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
+  if (isGeneratingInvoice) {
+    console.warn("Invoice generation is already in progress. Skipping duplicate generation.");
+    return;
+  }
+
+  isGeneratingInvoice = true;
   try {
     if (!user || !user.uid || !course || !course.courseId) {
       console.error("Invalid user or course ID");
+      isGeneratingInvoice = false;
       return;
     }
 
@@ -69,6 +78,7 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
     if (invoiceExists) {
         console.warn("Invoice already exists for this course. Skipping generation.");
         setLoading(false);
+        isGeneratingInvoice = false;
         return;
     }
 
@@ -76,6 +86,7 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
 
     if (!invoiceElement) {
       console.error("Invoice element is not ready");
+      isGeneratingInvoice = false;
       return;
     }
 
@@ -88,6 +99,7 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
 
     if (!invoiceNumberElement || !invoiceDateElement) {
       console.error("Invoice elements for setting date/number not found");
+      isGeneratingInvoice = false;
       return;
     }
 
@@ -99,6 +111,7 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
 
     if (invoiceElement.innerHTML.trim() === "") {
       console.error("Empty invoice content");
+      isGeneratingInvoice = false;
       return;
     }
 
@@ -139,6 +152,8 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
   } catch (error) {
     console.error('Error generating or saving invoice:', error);
     setLoading(false);
+  } finally {
+    isGeneratingInvoice = false;
   }
 };
 
