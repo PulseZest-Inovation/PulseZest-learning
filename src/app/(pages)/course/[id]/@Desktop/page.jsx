@@ -1,9 +1,9 @@
 'use client'
 
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid';
-import { useEffect, useRef, useState } from 'react';
-import {doc, getDoc} from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore';
 import Link from 'next/link'; // Import Link from Next.js for navigation
+import { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth'; // Firebase auth hook
 import { auth, db } from '../../../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project
 import fetchCourseData from '../Function/fetchCourseData';
@@ -152,13 +152,13 @@ export default function CourseDesktopScreen({ params }) {
             </div>
             {isPurchased ? (
               <Link href={`/dashboard`} passHref>
-                <p className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                <p className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition-colors cursor-pointer">
                   Dashboard
                 </p>
               </Link>
             ) : (
               <Link href={`/${id}/checkout`} passHref>
-                <p onClick={handleEnrollClick} className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                <p onClick={handleEnrollClick} className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
                   Enroll Now
                 </p>
               </Link>

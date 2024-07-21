@@ -70,20 +70,20 @@ const Header = () => {
                   style={{
                     padding: '15px 25px',
                     borderRadius: '15px',
-                    border: '2px solid #212121',
-                    color: '#212121',
+                    border: '2px solid #FFFFFF',
+                    color: '#FFFFFF',
                     fontWeight: 'bold',
                     fontSize: '18px',
                     overflow: 'hidden',
                     transition: 'background-color 0.3s ease, color 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#4ade80';
+                    e.target.style.backgroundColor = '#001d3d';
                     e.target.style.color = '#FFFFFF';
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.backgroundColor = 'transparent';
-                    e.target.style.color = '#212121';
+                    e.target.style.color = '#FFFFFF';
                   }}
                 >
                   Dashboard
