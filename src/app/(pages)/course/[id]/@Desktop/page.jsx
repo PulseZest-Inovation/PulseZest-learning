@@ -153,7 +153,7 @@ export default function CourseDesktopScreen({ params }) {
             {isPurchased ? (
               <Link href={`/dashboard`} passHref>
                 <p className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition-colors cursor-pointer">
-                  Dashboard
+                Dashboard
                 </p>
               </Link>
             ) : (

@@ -1,6 +1,8 @@
 'use client';
 
+import GoogleIcon from '@mui/icons-material/Google'; // Make sure to install @mui/icons-material if not already
 import Button from '@mui/material/Button';
+import Input from '@mui/material/Input';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
@@ -181,22 +183,52 @@ const CheckoutPage = ({ params }) => {
       case 0:
         return (
           <>
-            <Typography variant="body1" style={{ marginBottom: '10px' }}>
+            <Typography variant="body1" style={{ marginBottom: '10px', fontWeight: 'bold'}}>
               This is the login step where users can log in using their Google account or mobile OTP.
             </Typography>
             <Typography variant="body1" style={{ marginBottom: '10px' }}>
               {!user ? 'Please log in to proceed.' : 'You are already logged in.'}
             </Typography>
             {!user && (
-              <>
-                <Button variant="contained" color="primary" onClick={handleGoogleLogin} style={{ marginBottom: '10px', backgroundColor: '#4CAF50' }}>
-                  Login with Google
-                </Button>
-                  <Typography variant="contained">OR</Typography>
-                  <input type="text" placeholder="Enter mobile number" style={{ marginRight: '10px', backgroundColor: '#f1f1f1', border: 'none', padding: '8px', borderRadius: '4px' }} />
-                  <input type="text" placeholder="Enter OTP" style={{ marginRight: '10px', backgroundColor: '#f1f1f1', border: 'none', padding: '8px', borderRadius: '4px' }} />
-                  <Button variant="contained" color="primary">Login with OTP</Button>
-              </>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+               <Button
+                 variant="contained"
+                 color="primary"
+                 onClick={handleGoogleLogin}
+                 startIcon={<GoogleIcon />}
+                 style={{ backgroundColor: '#001d3d'}}
+               >
+                 Login with Google
+               </Button>
+               
+               <Typography variant="subtitle1" style={{ margin: '0 10px' }}>OR</Typography>
+               
+               <Input
+                 type="text"
+                 placeholder="Phone Number"
+                 style={{
+                   backgroundColor: '#f1f1f1',
+                   border: 'none',
+                   padding: '8px',
+                   borderRadius: '4px',
+                 }}
+               />
+               
+               <Input
+                 type="text"
+                 placeholder="OTP"
+                 style={{
+                   backgroundColor: '#f1f1f1',
+                   border: 'none',
+                   padding: '8px',
+                   borderRadius: '4px',
+                 }}
+               />
+               
+               <Button variant="contained"  style={{ backgroundColor: '#001d3d' }}>
+                 Login with OTP
+               </Button>
+             </div>
             )}
           </>
         );
