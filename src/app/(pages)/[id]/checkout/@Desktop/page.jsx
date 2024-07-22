@@ -1,6 +1,6 @@
 'use client';
 
-import GoogleIcon from '@mui/icons-material/Google'; // Make sure to install @mui/icons-material if not already
+import GoogleIcon from '@mui/icons-material/Google';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import Step from '@mui/material/Step';
@@ -15,10 +15,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Avatar from '../../../../assets/image/boy.png';
-import TermsOfService from '../../../../components/courseComponents/terms-of-service/page';
-import { auth, db } from '../../../../utils/Firebase/firebaseConfig';
-import InvoiceTemplate, { generateAndSaveInvoice } from './InvoiceTemplate'; // Adjust path
+import Avatar from '../../../../../assets/image/boy.png';
+import TermsOfService from '../../../../../components/courseComponents/terms-of-service/page';
+import { auth, db } from '../../../../../utils/Firebase/firebaseConfig';
+import InvoiceTemplate, { generateAndSaveInvoice } from './InvoiceTemplate';
 
 const steps = ['Login', 'Agreement', 'Payment'];
 
@@ -27,17 +27,17 @@ const CheckoutPage = ({ params }) => {
   const [activeStep, setActiveStep] = useState(user ? 1 : 0);
   const [userData, setUserData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [loading, setLoading] = useState(false); // Manage loading spinner state
+  const [loading, setLoading] = useState(false);
   const { id } = params;
   const [agreed, setAgreed] = useState(false);
-  const invoiceContainerRefs = useRef({}); // Ref for invoice template
+  const invoiceContainerRefs = useRef({});
 
   const fetchUserData = async (userId) => {
     try {
       const docRef = doc(db, 'users', userId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setUserData({ ...docSnap.data(), uid: userId }); // Ensure uid is included
+        setUserData({ ...docSnap.data(), uid: userId });
       } else {
         console.error('No such document!');
       }
@@ -57,7 +57,7 @@ const CheckoutPage = ({ params }) => {
       const courseRef = doc(collection(db, 'courses'), courseId);
       const courseSnap = await getDoc(courseRef);
       if (courseSnap.exists()) {
-        setCourseData({ ...courseSnap.data(), courseId }); // Ensure courseId is included
+        setCourseData({ ...courseSnap.data(), courseId });
       } else {
         console.error('No such course document!');
       }
@@ -76,13 +76,8 @@ const CheckoutPage = ({ params }) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, {
-        email: user.email,
-        name: user.displayName,
-        uid: user.uid,
-        suid: Math.floor(1000000 + Math.random() * 9000000).toString(),
-      });
-      setActiveStep(1); // Move to step 1 after login
+      await setDoc(userRef, { email: user.email, name: user.displayName, uid: user.uid });
+      setActiveStep(1);
     } catch (error) {
       console.error(error);
       toast.error('Failed to log in. Please try again.', { autoClose: 3000 });
@@ -105,26 +100,26 @@ const CheckoutPage = ({ params }) => {
 
   const handlePayment = async () => {
     try {
-      const name = userData ? userData.name : ''; // Fetch from user data if available
-      const email = userData ? userData.email : ''; // Fetch from user data if available
-      const phone = ''; // Replace with actual phone number logic if needed
+      const name = userData ? userData.name : '';
+      const email = userData ? userData.email : '';
+      const phone = '';
 
       const response = await axios.post('https://server-api-green.vercel.app/api/createOrder', {
-        amount: courseData.salePrice * 100, // Amount in paisa (e.g., ₹100 = 10000 paisa)
-        currency: 'INR', // Adjust based on your currency
-        receipt: 'receipt#1', // Replace with your own receipt logic
-        notes: { name, email, phone } // Use defined variables
+        amount: courseData.salePrice * 100,
+        currency: 'INR',
+        receipt: 'receipt#1',
+        notes: { name, email, phone }
       });
 
       const { data } = response;
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Use the environment variable directly
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.amount,
         currency: data.currency,
         order_id: data.id,
         name: 'PulseZest-Learning',
         description: 'Course Payment',
-        image: 'https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/logo.png?alt=media&token=208465a0-63ae-4999-9c75-cf976af6a616', // Replace with your logo URL
+        image: 'https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/logo.png?alt=media&token=208465a0-63ae-4999-9c75-cf976af6a616',
         handler: async (response) => {
           console.log('Payment success:', response);
 
@@ -132,43 +127,36 @@ const CheckoutPage = ({ params }) => {
 
           // Save payment details in Firestore under user's document
           const userCourseRef = doc(collection(db, 'users', user.uid, 'courses'), id);
-          const existingDoc = await getDoc(userCourseRef); // Check if the document exists
-          if (!existingDoc.exists()) {
-            await setDoc(userCourseRef, {
+          await setDoc(userCourseRef, {
+            courseId: id,
+            amount: data.amount,
+            currency: data.currency,
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            date: new Date()
+          });
+
+          const updatedDoc = await getDoc(userCourseRef);
+          const paymentDetails = updatedDoc.data();
+
+          // Generate and save invoice with payment and order IDs
+          await generateAndSaveInvoice(
+            { ...userData, uid: user.uid }, 
+            {
               courseId: id,
+              name: courseData.name,
+              dateProcessed: new Date(),
               amount: data.amount,
-              currency: data.currency,
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id,
-              signature: response.razorpay_signature,
-              date: new Date()
-            });
+              paymentId: paymentDetails.paymentId || '', 
+              orderId: paymentDetails.orderId || ''  
+            },
+            invoiceContainerRefs,
+            setLoading
+          );
 
-            // Generate and save invoice for the user and course
-            await generateAndSaveInvoice(
-              { ...userData, uid: user.uid }, // Ensuring uid key
-              {
-                courseId: id,
-                name: courseData.name,
-                dateProcessed: new Date(),
-                amount: data.amount,
-                paymentId: response.razorpay_payment_id,
-                orderId: response.razorpay_order_id
-              },
-              invoiceContainerRefs,
-              setLoading // Pass the setLoading function to control loading state
-            );
+          toast.success('Payment successful! Course access granted.', { autoClose: 3000 });
 
-            // Show toast notification
-            toast.success('Payment successful! Course access granted.', { autoClose: 3000 });
-
-            // // Redirect to /home
-            // router.push('/home');
-
-          } else {
-            toast.warn('Course already purchased.', { autoClose: 3000 });
-            setLoading(false);
-          }
         },
         prefill: {
           name,
@@ -185,6 +173,7 @@ const CheckoutPage = ({ params }) => {
 
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
+
     } catch (error) {
       console.error('Error initiating payment:', error);
       toast.error('Payment failed. Please try again.', { autoClose: 3000 });
@@ -202,7 +191,7 @@ const CheckoutPage = ({ params }) => {
   }, []);
 
   const handleAgreement = () => {
-    setAgreed(true); // Set agreed state to true
+    setAgreed(true);
   };
 
   const renderStepContent = (stepIndex) => {
@@ -423,11 +412,11 @@ const CheckoutPage = ({ params }) => {
               courseId: id,
               name: courseData.name,
               dateProcessed: new Date(),
-              amount: courseData.salePrice * 100, // Assuming salePrice is in rupees
-              paymentId: '', // Placeholder
-              orderId: '' // Placeholder
+              amount: courseData.salePrice * 100,
+              paymentId: '',
+              orderId: ''
             }} 
-            setLoading={setLoading} // Pass the setLoading function to InvoiceTemplate
+            setLoading={setLoading} 
             refs={invoiceContainerRefs} 
           />
         </div>

@@ -1,14 +1,13 @@
+import { useEffect } from 'react';
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import html2pdf from 'html2pdf.js';
-import { useEffect } from 'react';
-import { learningFirestore, learningstorage } from '../../../../learningUtils/firebaseConfig';
+import { learningFirestore, learningstorage } from '../../../../../learningUtils/firebaseConfig';
 
 const fetchLastInvoiceNumber = async () => {
   try {
     const docRef = doc(learningFirestore, 'invoiceNumbers', 'lastInvoice');
     const docSnap = await getDoc(docRef);
-
     if (docSnap.exists()) {
       return docSnap.data().lastInvoiceNumber;
     } else {
@@ -73,15 +72,28 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
       return;
     }
 
+    // Fetch paymentId and orderId from Firestore
+    const courseDocRef = doc(learningFirestore, `users/${user.uid}/courses/${course.courseId}`);
+    const courseDocSnap = await getDoc(courseDocRef);
+
+    if (courseDocSnap.exists()) {
+      course.paymentId = courseDocSnap.data().paymentId;
+      course.orderId = courseDocSnap.data().orderId;
+    } else {
+      console.error("No such document!");
+      isGeneratingInvoice = false;
+      return;
+    }
+
     // Check if the invoice already exists
     const invoiceExists = await checkIfInvoiceExists(user.uid, course.courseId);
     if (invoiceExists) {
-        console.warn("Invoice already exists for this course. Skipping generation.");
-        setLoading(false);
-        isGeneratingInvoice = false;
-        return;
+      console.warn("Invoice already exists for this course. Skipping generation.");
+      setLoading(false);
+      isGeneratingInvoice = false;
+      return;
     }
-
+    
     const invoiceElement = refs.current[`${user.uid}-${course.courseId}`];
 
     if (!invoiceElement) {
@@ -96,15 +108,19 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
     // Set invoice number and date after ensuring the element is ready
     const invoiceNumberElement = document.getElementById(`invoiceNumber-${user.uid}-${course.courseId}`);
     const invoiceDateElement = document.getElementById(`invoiceDate-${user.uid}-${course.courseId}`);
+    const paymentIdElement = document.getElementById(`paymentId-${user.uid}-${course.courseId}`);
+    const orderIdElement = document.getElementById(`orderId-${user.uid}-${course.courseId}`);
 
-    if (!invoiceNumberElement || !invoiceDateElement) {
-      console.error("Invoice elements for setting date/number not found");
+    if (!invoiceNumberElement || !invoiceDateElement || !paymentIdElement || !orderIdElement) {
+      console.error("Invoice elements for setting date/number/ID not found");
       isGeneratingInvoice = false;
       return;
     }
 
     invoiceNumberElement.innerText = `Invoice #: ${newInvoiceNumber}`;
     invoiceDateElement.innerText = `Date: ${formattedDate}`;
+    paymentIdElement.innerText = `Payment Id: ${course.paymentId}`;
+    orderIdElement.innerText = `Order Id: ${course.orderId}`;
 
     // Wait for rendering to complete
     await new Promise(resolve => setTimeout(resolve, 2000)); // Increase delay to ensure rendering is complete
@@ -137,7 +153,9 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
     await setDoc(docRef, {
       invoiceNumber: newInvoiceNumber,
       pdfUrl: pdfURL,
-      courseId: course.courseId
+      courseId: course.courseId,
+      paymentId: course.paymentId, // Ensure paymentId is saved
+      orderId: course.orderId // Ensure orderId is saved
     });
 
     // Update last invoice number
@@ -158,10 +176,9 @@ const generateAndSaveInvoice = async (user, course, refs, setLoading) => {
 };
 
 const InvoiceTemplate = ({ userData, courseData, setLoading, refs }) => {
-
   useEffect(() => {
-    if (userData && courseData) {
-      generateAndSaveInvoice(userData, courseData, refs, setLoading); // Generate invoice
+    if (userData && courseData && !isGeneratingInvoice) {
+      generateAndSaveInvoice(userData, courseData, refs, setLoading);
     }
   }, [userData, courseData]);
 
@@ -215,7 +232,7 @@ const InvoiceTemplate = ({ userData, courseData, setLoading, refs }) => {
               <tr>
                 <td style={styles.tableContent}>1</td>
                 <td style={styles.tableContent}>{courseData.name}</td>
-                <td style={styles.tableContent}>{(courseData.amount / 100).toFixed(2)}</td>
+                <td style={styles.tableContent}>{((courseData.amount * 0.82) / 100).toFixed(2)}</td>
                 <td style={styles.tableContent}>1</td>
                 <td style={styles.tableContent}>{((courseData.amount * 0.18) / 100).toFixed(2)}</td>
                 <td style={styles.tableContent}>{(courseData.amount / 100).toFixed(2)}</td>
@@ -230,8 +247,8 @@ const InvoiceTemplate = ({ userData, courseData, setLoading, refs }) => {
           </div>
           <div style={styles.paymentDetails}>
             <div style={styles.sectionTitle}>PAYMENT DETAILS</div>
-            <div style={styles.infoItem}>Payment Id: {courseData.paymentId}</div>
-            <div style={styles.infoItem}>Order Id: {courseData.orderId}</div>
+            <div style={styles.infoItem} id={`paymentId-${userData.uid}-${courseData.courseId}`}>Payment Id: N/A</div>
+            <div style={styles.infoItem} id={`orderId-${userData.uid}-${courseData.courseId}`}>Order Id: N/A</div>
           </div>
           <h1 style={{ fontSize: '24px', margin: '0 0 0 auto', color: '#555', position: 'relative', left: '230px' }}>Love From ❤️ PulseZest</h1>
 
@@ -359,4 +376,4 @@ const styles = {
 };
 
 export default InvoiceTemplate;
-export { fetchLastInvoiceNumber, formatDate, generateAndSaveInvoice, generateInvoiceNumber };
+export { generateAndSaveInvoice, generateInvoiceNumber, fetchLastInvoiceNumber, formatDate };
