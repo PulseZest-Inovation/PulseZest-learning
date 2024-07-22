@@ -12,6 +12,7 @@ const DesktopMyCourses = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [selectedTopicDescription, setSelectedTopicDescription] = useState("");
+    const [selectedVideoDescription, setSelectedVideoDescription] = useState(null);
     const [loading, setLoading] = useState(true);
     const [expandedChapters, setExpandedChapters] = useState({});
     const [expandedTopics, setExpandedTopics] = useState({});
@@ -53,8 +54,21 @@ const DesktopMyCourses = () => {
 
                 const coursePromises = courseIds.map(async (courseId) => {
                     const courseDoc = await getDoc(doc(db, 'courses', courseId));
-                    const { name, description, thumbnail, chapters } = courseDoc.data();
-                    return { id: courseDoc.id, name, description, thumbnail, chapters };
+                    const courseData = courseDoc.data();
+                    const { name, description, thumbnail, chapters } = courseData;
+
+                    // Fetch chapters with their video links and descriptions
+                    const updatedChapters = await Promise.all(chapters.map(async (chapter) => {
+                        const topics = await Promise.all(chapter.topics.map(async (topic) => {
+                            return {
+                                ...topic,
+                                videoLinks: topic.videoLinks || [] // Ensure videoLinks is not undefined
+                            };
+                        }));
+                        return { ...chapter, topics };
+                    }));
+
+                    return { id: courseDoc.id, name, description, thumbnail, chapters: updatedChapters };
                 });
 
                 const courseList = await Promise.all(coursePromises);
@@ -81,6 +95,8 @@ const DesktopMyCourses = () => {
     const handleCourseClick = (course) => {
         setSelectedCourse(course);
         setSelectedVideo(null); // Reset selected video when selecting a new course
+        setSelectedTopicDescription(""); // Reset description when selecting a new course
+        setSelectedVideoDescription(null); // Reset video description
         // Expand the first chapter by default
         const firstChapterId = course.chapters[0]?.chapterName;
         setExpandedChapters({ [firstChapterId]: true });
@@ -101,8 +117,9 @@ const DesktopMyCourses = () => {
     };
 
     const handleVideoSelect = (videoLink, topicDescription) => {
-        setSelectedVideo(videoLink);
+        setSelectedVideo(videoLink.link); // Update to access the link property
         setSelectedTopicDescription(topicDescription);
+        setSelectedVideoDescription(videoLink.description); // Store video description
     };
 
     if (loading) {
@@ -138,7 +155,12 @@ const DesktopMyCourses = () => {
                                     Your browser does not support the video tag.
                                 </video>
                                 <h1 className="font-bold text-2xl mt-4">Description</h1>
-                                <p>{selectedTopicDescription}</p>
+                                {selectedVideoDescription && (
+                                    <div
+                                        style={{ border: '1px solid #ccc', padding: '10px', marginTop: '10px' }}
+                                        dangerouslySetInnerHTML={{ __html: selectedVideoDescription }}
+                                    />
+                                )}
                             </>
                         ) : (
                             <p className="text-gray-400">Select a video to play</p>
@@ -170,7 +192,7 @@ const DesktopMyCourses = () => {
                                                 </div>
                                                 {expandedTopics[topic.topicName] && (
                                                     <div className="mt-2 space-y-2">
-                                                        <p className="text-sm text-gray-400">{topic.topicDescription}</p>
+                                                        <p className="text-sm text-gray-400">{topic.topicDescription}</p> {/* Show topic description */}
                                                         {topic.videoLinks.map((videoLink, videoIndex) => (
                                                             <div
                                                                 key={videoIndex}

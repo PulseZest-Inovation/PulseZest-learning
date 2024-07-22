@@ -14,6 +14,7 @@ const PhoneMyCourses = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [selectedTopicDescription, setSelectedTopicDescription] = useState("");
+    const [selectedVideoDescription, setSelectedVideoDescription] = useState(null);
     const [loading, setLoading] = useState(true);
     const [expandedChapters, setExpandedChapters] = useState({});
     const [expandedTopics, setExpandedTopics] = useState({});
@@ -56,8 +57,21 @@ const PhoneMyCourses = () => {
 
                 const coursePromises = courseIds.map(async (courseId) => {
                     const courseDoc = await getDoc(doc(db, 'courses', courseId));
-                    const { title, description, thumbnail, chapters, progress, category, level } = courseDoc.data();
-                    return { id: courseDoc.id, title, description, thumbnail, chapters, progress, category, level };
+                    const courseData = courseDoc.data();
+                    const { title, description, thumbnail, chapters, progress, category, level } = courseData;
+
+                    // Fetch chapters with their video links and descriptions
+                    const updatedChapters = await Promise.all(chapters.map(async (chapter) => {
+                        const topics = await Promise.all(chapter.topics.map(async (topic) => {
+                            return {
+                                ...topic,
+                                videoLinks: topic.videoLinks || [] // Ensure videoLinks is not undefined
+                            };
+                        }));
+                        return { ...chapter, topics };
+                    }));
+
+                    return { id: courseDoc.id, title, description, thumbnail, chapters: updatedChapters, progress, category, level };
                 });
 
                 const courseList = await Promise.all(coursePromises);
@@ -88,6 +102,8 @@ const PhoneMyCourses = () => {
     const handleCourseClick = (course) => {
         setSelectedCourse(course);
         setSelectedVideo(null); // Reset selected video when selecting a new course
+        setSelectedTopicDescription(""); // Reset description when selecting a new course
+        setSelectedVideoDescription(null); // Reset video description
         // Expand the first chapter by default
         const firstChapterId = course.chapters[0]?.chapterName;
         setExpandedChapters({ [firstChapterId]: true });
@@ -108,22 +124,63 @@ const PhoneMyCourses = () => {
     };
 
     const handleVideoSelect = (videoLink, topicDescription) => {
-        setSelectedVideo(videoLink);
+        setSelectedVideo(videoLink.link); // Updated to access the link property
         setSelectedTopicDescription(topicDescription);
+        setSelectedVideoDescription(videoLink.description); // Store video description
         // Scroll to the top of the page
         if (videoRef.current) {
             videoRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
+    const handleBackToSelector = () => {
+        setSelectedVideo(null); // Reset selected video
+        setSelectedTopicDescription(""); // Reset description
+        setSelectedVideoDescription(null); // Reset video description
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
+    if (selectedCourse && selectedVideo) {
+        return (
+            <div className="min-h-screen bg-gray-200 p-8">
+                <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-full mb-4"
+                    onClick={handleBackToSelector}
+                >
+                    Back to Video Selector
+                </button>
+                <div ref={videoRef} className="md:w-2/3 p-4 rounded-lg shadow-lg relative bg-white">
+                    <video
+                        key={selectedVideo} // Ensure re-render on video change
+                        controls
+                        className="w-full h-64 object-cover rounded-lg shadow-lg"
+                        disablePictureInPicture
+                        onContextMenu={(e) => e.preventDefault()}
+                        controlsList="nodownload noremoteplayback noplaybackrate noautohide"
+                    >
+                        <source src={selectedVideo} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    <h1 className="font-bold text-2xl mt-4 text-black">Description</h1>
+                    {/* Adding HTML Preview */}
+                    {selectedVideoDescription && (
+                        <div
+                            style={{ border: '1px solid #ccc', padding: '10px', marginTop: '10px' }}
+                            dangerouslySetInnerHTML={{ __html: selectedVideoDescription }}
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
+
     if (selectedCourse) {
         return (
-<div className="min-h-screen bg-gray-200 p-8">
-            <button
+            <div className="min-h-screen bg-gray-200 p-8">
+                <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-full mb-4"
                     onClick={() => setSelectedCourse(null)}
                 >
@@ -133,30 +190,6 @@ const PhoneMyCourses = () => {
                     <h2 className="text-3xl font-bold">{selectedCourse.title}</h2>
                 </div>
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
-                    {/* Video Player */}
-                    <div ref={videoRef} className="md:w-2/3 p-4 rounded-lg shadow-lg relative bg-white">
-                        {selectedVideo ? (
-                            <>
-                                <video
-                                    key={selectedVideo} // Ensure re-render on video change
-                                    controls
-                                    className="w-full h-64 object-cover rounded-lg shadow-lg"
-                                    disablePictureInPicture
-                                    onContextMenu={(e) => e.preventDefault()}
-                                    controlsList="nodownload noremoteplayback noplaybackrate noautohide"
-                                >
-                                    <source src={selectedVideo} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                                <h1 className="font-bold text-2xl mt-4 text-black">Description</h1>
-
-                                <p className="text-gray-900">{selectedTopicDescription}</p>
-                            </>
-                        ) : (
-                            <p className="text-gray-400">Select a video to play</p>
-                        )}
-                    </div>
-
                     {/* Topics List */}
                     <div className="md:w-1/3 bg-white p-4 rounded-lg shadow-lg overflow-y-auto">
                         {selectedCourse.chapters.map((chapter, chapterIndex) => (
@@ -182,6 +215,7 @@ const PhoneMyCourses = () => {
                                                 </div>
                                                 {expandedTopics[topic.topicName] && (
                                                     <div className="mt-2 space-y-2">
+                                                        <p className="text-gray-700 p-2 bg-gray-100 rounded-lg">{topic.topicDescription}</p> {/* Topic description */}
                                                         {topic.videoLinks.map((videoLink, videoIndex) => (
                                                             <div 
                                                                 key={videoIndex} 
