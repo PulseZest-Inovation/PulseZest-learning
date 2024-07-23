@@ -33,6 +33,10 @@ export default function CourseDesktopScreen({ params }) {
   const [isPurchased, setIsPurchased] = useState(false); // State to check if the course is purchased
   const [timeLeft, setTimeLeft] = useState(''); // State for the countdown timer
 
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
   const fetchData = async () => {
     const data = await fetchCourseData(id); // Fetch course data based on id
     if (data) {
@@ -53,9 +57,40 @@ export default function CourseDesktopScreen({ params }) {
     fetchData();
   }, [id, user]);
 
-  const videoRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const activeSale = courseData.sales?.find(sale => sale.live === true);
+  const displayPrice = isPurchased ? courseData.salePrice : (activeSale ? activeSale.price : courseData.salePrice);
+  const regularPrice = courseData.regularPrice;
+
+  // Format prices using Indian numbering system with commas
+  const formatter = new Intl.NumberFormat('en-IN');
+
+  // Calculate discount percentage
+  const discount = activeSale ? Math.round(((regularPrice - activeSale.price) / regularPrice) * 100) : 0;
+
+  // Countdown Timer Calculation
+  useEffect(() => {
+    if (activeSale && activeSale.saleTime) {
+      const countdown = setInterval(() => {
+        const now = new Date().getTime();
+        const saleEndTime = new Date(activeSale.saleTime).getTime();
+        const distance = saleEndTime - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+
+        if (distance < 0) {
+          clearInterval(countdown);
+          setTimeLeft('Expired');
+        }
+      }, 1000);
+
+      return () => clearInterval(countdown);
+    }
+  }, [activeSale]);
 
   const handlePlayToggle = () => {
     if (videoRef.current) {
@@ -92,46 +127,10 @@ export default function CourseDesktopScreen({ params }) {
     return <div>Loading...</div>; // Show loading state while user authentication is in progress
   }
 
-  // Determine active sale price (if any)
-  const activeSale = courseData.sales?.find(sale => sale.live === true);
-  const displayPrice = isPurchased ? courseData.salePrice : (activeSale ? activeSale.price : courseData.salePrice);
-  const regularPrice = courseData.regularPrice;
-
-  // Format prices using Indian numbering system with commas
-  const formatter = new Intl.NumberFormat('en-IN');
-
-  // Calculate discount percentage
-  const discount = activeSale ? Math.round(((regularPrice - activeSale.price) / regularPrice) * 100) : 0;
-
-  // Countdown Timer Calculation
-  useEffect(() => {
-    if (activeSale && activeSale.saleTime) {
-      const countdown = setInterval(() => {
-        const now = new Date().getTime();
-        const saleEndTime = new Date(activeSale.saleTime).getTime();
-        const distance = saleEndTime - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-
-        if (distance < 0) {
-          clearInterval(countdown);
-          setTimeLeft('Expired');
-        }
-      }, 1000);
-
-      return () => clearInterval(countdown);
-    }
-  }, [activeSale]);
-
   return (
     <div className="min-h-screen bg-blue-200 pt-8 pb-16">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8">
-        <h1 className="p-6 text-3xl font-bold text-blue-600 animate-fade-in">{courseData.courseName}</h1>
+        <h1 className="p-6 text-3xl font-bold text-blue-600 animate-fade-in">{courseData.name}</h1>
         <div className="relative">
           <video
             ref={videoRef}
@@ -171,7 +170,7 @@ export default function CourseDesktopScreen({ params }) {
           {!isPurchased && activeSale && (
             <div className="bg-yellow-200 p-4 mb-4 rounded-lg shadow-md animate-bounce">
               <p className="text-lg font-semibold text-yellow-700">
-                Limited Time Offer! Get {discount}% off! Ends in {timeLeft}
+               🎉 Limited Time Offer! Get {discount}% off! Ends in {timeLeft} 🎉
               </p>
             </div>
           )}
@@ -196,9 +195,9 @@ export default function CourseDesktopScreen({ params }) {
               </div>
             </div>
             {isPurchased ? (
-              <Link href={`/dashboard`} passHref>
+              <Link href={`/dashboard/my-course`} passHref>
                 <p className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition-colors cursor-pointer">
-                  Dashboard
+                  Go To Dashboard
                 </p>
               </Link>
             ) : (
