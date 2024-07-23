@@ -31,6 +31,7 @@ export default function CourseDesktopScreen({ params }) {
   });
 
   const [isPurchased, setIsPurchased] = useState(false); // State to check if the course is purchased
+  const [timeLeft, setTimeLeft] = useState(''); // State for the countdown timer
 
   const fetchData = async () => {
     const data = await fetchCourseData(id); // Fetch course data based on id
@@ -93,16 +94,44 @@ export default function CourseDesktopScreen({ params }) {
 
   // Determine active sale price (if any)
   const activeSale = courseData.sales?.find(sale => sale.live === true);
-  const displayPrice = activeSale ? activeSale.price : courseData.salePrice;
+  const displayPrice = isPurchased ? courseData.salePrice : (activeSale ? activeSale.price : courseData.salePrice);
   const regularPrice = courseData.regularPrice;
 
   // Format prices using Indian numbering system with commas
   const formatter = new Intl.NumberFormat('en-IN');
 
+  // Calculate discount percentage
+  const discount = activeSale ? Math.round(((regularPrice - activeSale.price) / regularPrice) * 100) : 0;
+
+  // Countdown Timer Calculation
+  useEffect(() => {
+    if (activeSale && activeSale.saleTime) {
+      const countdown = setInterval(() => {
+        const now = new Date().getTime();
+        const saleEndTime = new Date(activeSale.saleTime).getTime();
+        const distance = saleEndTime - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+
+        if (distance < 0) {
+          clearInterval(countdown);
+          setTimeLeft('Expired');
+        }
+      }, 1000);
+
+      return () => clearInterval(countdown);
+    }
+  }, [activeSale]);
+
   return (
     <div className="min-h-screen bg-blue-200 pt-8 pb-16">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8">
-        <h1 className="p-6 text-3xl font-bold text-blue-600">{courseData.name}</h1>
+        <h1 className="p-6 text-3xl font-bold text-blue-600 animate-fade-in">{courseData.courseName}</h1>
         <div className="relative">
           <video
             ref={videoRef}
@@ -110,7 +139,7 @@ export default function CourseDesktopScreen({ params }) {
             alt="Intro Video"
             width={800}
             height={450}
-            className="w-full"
+            className="w-full animate-slide-in"
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           />
@@ -139,6 +168,13 @@ export default function CourseDesktopScreen({ params }) {
           </div>
         </div>
         <div className="p-6">
+          {!isPurchased && activeSale && (
+            <div className="bg-yellow-200 p-4 mb-4 rounded-lg shadow-md animate-bounce">
+              <p className="text-lg font-semibold text-yellow-700">
+                Limited Time Offer! Get {discount}% off! Ends in {timeLeft}
+              </p>
+            </div>
+          )}
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-lg text-gray-800">{courseData.courseLevel}</p>
@@ -167,31 +203,23 @@ export default function CourseDesktopScreen({ params }) {
               </Link>
             ) : (
               <Link href={`/${id}/checkout`} passHref>
-                <p onClick={handleEnrollClick} className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
+                <p onClick={handleEnrollClick} className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition-colors cursor-pointer">
                   Enroll Now
                 </p>
               </Link>
             )}
           </div>
-
           <br />
-
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
-              Description
-            </h3>
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">Description</h3>
             <p className="text-lg text-gray-700">{courseData.description}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
-              What You Will Learn
-            </h3>
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">What You Will Learn</h3>
             <p className="text-lg text-gray-700">{courseData.whatYouLearn}</p>
           </div>
           <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-blue-600 mb-2">
-              Course Requirements
-            </h3>
+            <h3 className="text-2xl font-semibold text-blue-600 mb-2">Course Requirements</h3>
             <p className="text-lg text-gray-700">{courseData.courseRequirements}</p>
           </div>
           <div className="mb-6">
