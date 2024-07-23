@@ -156,12 +156,21 @@ export default function PhoneProfileScreen() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-blue-100 text-gray-800">
       <div className="flex-grow p-4 relative">
         {/* Edit Profile Button */}
-        <button
-          className="absolute top-4 right-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-          onClick={() => setIsEditing(true)}
-        >
-          Edit Profile
-        </button>
+        {!isEditing ? (
+            <button
+              className="absolute top-4 right-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit Profile
+            </button>
+          ) : (
+            <button
+              className="absolute top-4 right-4 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          )}
         <header className="text-center mb-6">
           <Image
             src={userDetails.profilePhoto}
@@ -245,14 +254,6 @@ export default function PhoneProfileScreen() {
         </section>
       </div>
       <footer className="text-center bg-white py-4 shadow">
-        {isEditing && (
-          <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors mr-2"
-            onClick={handleSave}
-          >
-            Save
-          </button>
-        )}
         <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Settings</button>
       </footer>
     </div>
