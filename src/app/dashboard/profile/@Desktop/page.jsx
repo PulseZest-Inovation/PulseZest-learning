@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { db, auth, storage } from '../../../../utils/Firebase/firebaseConfig';
-import { doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { auth, db, storage } from '../../../../utils/Firebase/firebaseConfig';
 
 export default function DekstopProfileScreen() {
   const [username, setUsername] = useState('John Doe');
@@ -189,14 +189,14 @@ export default function DekstopProfileScreen() {
         <div>
           {isEditing ? (
             <button
-              className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-indigo-900 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
               onClick={handleSave}
             >
               Save
             </button>
           ) : (
             <button
-              className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-indigo-900 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
               onClick={() => setIsEditing(true)}
             >
               Edit Profile

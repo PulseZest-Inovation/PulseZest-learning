@@ -1,11 +1,10 @@
-import React from 'react';
 
 const AchievementsPage = () => {
  
 
   return (
     <div>
-      <h1 className='text-5xl text-black'>Achievements</h1>
+      <h1 className="text-6xl font-bold text-black mb-12 text-center">Achievement</h1>
      
     </div>
   );

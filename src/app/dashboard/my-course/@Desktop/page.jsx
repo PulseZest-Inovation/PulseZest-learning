@@ -1,11 +1,11 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
-import VanillaTilt from 'vanilla-tilt';
-import Image from 'next/image';
-import { db, auth } from '../../../../utils/Firebase/firebaseConfig';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { FaVideo, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+import { FaChevronDown, FaChevronUp, FaVideo } from 'react-icons/fa';
+import VanillaTilt from 'vanilla-tilt';
+import { auth, db } from '../../../../utils/Firebase/firebaseConfig';
 
 const DesktopMyCourses = () => {
     const [courses, setCourses] = useState([]);
