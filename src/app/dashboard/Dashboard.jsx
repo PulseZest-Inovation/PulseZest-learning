@@ -1,14 +1,14 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { FaBook, FaChartLine, FaCog, FaUser } from 'react-icons/fa';
-import { useRouter } from 'next/navigation'; // For programmatic navigation
-import { db, auth } from '../../utils/Firebase/firebaseConfig';
-import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import Header from './Header';
-import NotificationDesktopScreen from './notification/layout';
-import DesktopMyCourses from './my-course/@Desktop/page';
+import { doc, getDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation'; // For programmatic navigation
+import { useEffect, useState } from 'react';
+import { FaBook, FaChartLine, FaCog, FaUser } from 'react-icons/fa';
+import { auth, db } from '../../utils/Firebase/firebaseConfig';
 import AchievementsPage from './achivment/page';
+import Header from './Header';
+import DesktopMyCourses from './my-course/@Desktop/page';
+import NotificationDesktopScreen from './notification/layout';
 import DekstopProfileScreen from './profile/@Desktop/page';
 import SettignDesktopPage from './setting/@Desktop/page';
 
@@ -92,14 +92,14 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <div className="w-1/6 bg-gradient-to-r from-purple-500 to-indigo-600 text-white flex flex-col">
+      <div className="w-1/6 bg-gradient-to-r from-blue-900 to-indigo-900 text-white flex flex-col">
         <div className="p-6 text-3xl font-extrabold">PulseZest</div>
-        <div className="user">Welcome 👋🏻 {username}</div>
+        <div className="user ml-4">Welcome {username}</div>
         <div className="flex flex-col mt-8 space-y-4">
           <button
             onClick={() => handleTabChange('my-course')}
-            className={`flex items-center p-4 hover:bg-purple-700 rounded-lg transition-all duration-300 ${
-              activeTab === 'my-course' ? 'bg-purple-700' : ''
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-300 ${
+              activeTab === 'my-course' ? 'bg-indigo-400' : ''
             }`}
           >
             <FaBook className="mr-3" />
@@ -107,17 +107,17 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => handleTabChange('Achivment')}
-            className={`flex items-center p-4 hover:bg-purple-700 rounded-lg transition-all duration-300 ${
-              activeTab === 'Achivment' ? 'bg-purple-700' : ''
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-300 ${
+              activeTab === 'Achivment' ? 'bg-indigo-400' : ''
             }`}
           >
             <FaChartLine className="mr-3" />
-            Achivment
+            Achievement
           </button>
           <button
             onClick={() => handleTabChange('Profile')}
-            className={`flex items-center p-4 hover:bg-purple-700 rounded-lg transition-all duration-300 ${
-              activeTab === 'Profile' ? 'bg-purple-700' : ''
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-300 ${
+              activeTab === 'Profile' ? 'bg-indigo-400' : ''
             }`}
           >
             <FaUser className="mr-3" />
@@ -125,8 +125,8 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => handleTabChange('settings')}
-            className={`flex items-center p-4 hover:bg-purple-700 rounded-lg transition-all duration-300 ${
-              activeTab === 'settings' ? 'bg-purple-700' : ''
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-300 ${
+              activeTab === 'settings' ? 'bg-indigo-400' : ''
             }`}
           >
             <FaCog className="mr-3" />
