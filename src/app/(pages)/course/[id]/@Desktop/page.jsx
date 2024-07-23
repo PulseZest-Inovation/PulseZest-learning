@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { PauseIcon, PlayIcon } from '@heroicons/react/solid';
 import { doc, getDoc } from 'firebase/firestore';
@@ -27,27 +27,28 @@ export default function CourseDesktopScreen({ params }) {
     duration: '',
     language: '',
     rating: '',
+    sales: [],
   });
-  
+
   const [isPurchased, setIsPurchased] = useState(false); // State to check if the course is purchased
 
+  const fetchData = async () => {
+    const data = await fetchCourseData(id); // Fetch course data based on id
+    if (data) {
+      setCourseData(data);
+    }
+
+    if (user) {
+      // Fetch user-specific data to check course purchase
+      const userCourseRef = doc(db, 'users', user.uid, 'courses', id);
+      const userDoc = await getDoc(userCourseRef);
+      if (userDoc.exists()) {
+        setIsPurchased(true); // Set course as purchased if found in Firestore
+      }
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchCourseData(id); // Fetch course data based on id
-      if (data) {
-        setCourseData(data);
-      }
-
-      if (user) {
-        // Fetch user-specific data to check course purchase
-        const userCourseRef = doc(db, 'users', user.uid, 'courses', id);
-        const userDoc = await getDoc(userCourseRef);
-        if (userDoc.exists()) {
-          setIsPurchased(true); // Set course as purchased if found in Firestore
-        }
-      }
-    };
-
     fetchData();
   }, [id, user]);
 
@@ -89,6 +90,14 @@ export default function CourseDesktopScreen({ params }) {
   if (loading) {
     return <div>Loading...</div>; // Show loading state while user authentication is in progress
   }
+
+  // Determine active sale price (if any)
+  const activeSale = courseData.sales?.find(sale => sale.live === true);
+  const displayPrice = activeSale ? activeSale.price : courseData.salePrice;
+  const regularPrice = courseData.regularPrice;
+
+  // Format prices using Indian numbering system with commas
+  const formatter = new Intl.NumberFormat('en-IN');
 
   return (
     <div className="min-h-screen bg-blue-200 pt-8 pb-16">
@@ -135,11 +144,11 @@ export default function CourseDesktopScreen({ params }) {
               <p className="text-lg text-gray-800">{courseData.courseLevel}</p>
             </div>
             <div className="text-3xl font-bold text-blue-600 mb-4">
-              ₹{courseData.salePrice && (
-                <span className="line-through"> {courseData.regularPrice}</span>
+              {regularPrice && (
+                <span className="line-through">₹{formatter.format(regularPrice)}</span>
               )}
               {' '}
-              {courseData.salePrice}
+              ₹{formatter.format(displayPrice)}
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -153,7 +162,7 @@ export default function CourseDesktopScreen({ params }) {
             {isPurchased ? (
               <Link href={`/dashboard`} passHref>
                 <p className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-900 transition-colors cursor-pointer">
-                Dashboard
+                  Dashboard
                 </p>
               </Link>
             ) : (
