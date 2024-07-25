@@ -1,12 +1,12 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
-import VanillaTilt from 'vanilla-tilt';
-import Image from 'next/image';
-import { db, auth } from '../../../../utils/Firebase/firebaseConfig';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FaVideo, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useEffect, useRef, useState } from 'react';
+import { FaChevronDown, FaChevronUp, FaVideo } from 'react-icons/fa';
+import VanillaTilt from 'vanilla-tilt';
+import { auth, db } from '../../../../utils/Firebase/firebaseConfig';
 
 const PhoneMyCourses = () => {
     const router = useRouter();
@@ -145,14 +145,14 @@ const PhoneMyCourses = () => {
 
     if (selectedCourse && selectedVideo) {
         return (
-            <div className="min-h-screen bg-gray-200 p-8">
+            <div className="min-h-screen bg-gray-200 p-4">
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-full mb-4"
                     onClick={handleBackToSelector}
                 >
                     Back to Video Selector
                 </button>
-                <div ref={videoRef} className="md:w-2/3 p-4 rounded-lg shadow-lg relative bg-white">
+                <div ref={videoRef} className="md:w-2/3 p-2 rounded-lg shadow-lg relative bg-white">
                     <video
                         key={selectedVideo} // Ensure re-render on video change
                         controls
@@ -262,14 +262,14 @@ const PhoneMyCourses = () => {
                             alt={course.title}
                             width={200}
                             height={120}
-                            className="w-full h-32 object-cover rounded-lg mb-4"
+                            className="w-full h-33 object-cover rounded-lg mb-4"
                         />
                         <h2 className="text-xl font-semibold text-blue-600">{course.title}</h2>
                         <p className="text-gray-700 text-center">{course.description}</p>
                         <div className="flex justify-between w-full text-xs mt-2">
-                            <span className="bg-blue-500 text-white px-2 py-1 rounded-full">{course.progress}% Complete</span>
-                            <span className="bg-red-500 text-white px-2 py-1 rounded-full">{course.category}</span>
-                            <span className="bg-yellow-500 text-white px-2 py-1 rounded-full">{course.level}</span>
+                            <span className="bg-blue-500 text-white px-3 py-1 rounded-full">{course.progress}% Complete</span>
+                            <span className="bg-red-500 text-white px-3 py-1 rounded-full">{course.category}</span>
+                            <span className="bg-yellow-500 text-white px-3 py-1 rounded-full">{course.level}</span>
                         </div>
                         <button
                             className="bg-blue-600 text-white px-4 py-2 rounded-full mt-4 w-full font-semibold hover:bg-blue-700 transition-colors duration-300"
