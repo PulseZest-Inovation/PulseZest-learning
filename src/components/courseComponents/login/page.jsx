@@ -82,7 +82,7 @@ const LoginPage = ({ onLogin }) => {
           marginTop: '-220px',
         }}
       >
-        <Typography variant="h4" style={{ fontWeight: 'bold', marginBottom: '1rem', textAlign: 'center' }}>
+        <Typography variant="h4" style={{ fontWeight: 'bold', marginBottom: '1rem', textAlign: 'center' , color:'black' }}>
           {signupMode ? 'Sign Up' : 'Login'}
         </Typography>
         {signupMode && (

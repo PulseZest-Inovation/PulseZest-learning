@@ -8,6 +8,7 @@ import { HiX } from 'react-icons/hi';
 import Logo from '../../../assets/image/logo.png';
 import Login from '../../../components/courseComponents/login/page';
 import { auth } from '../../../utils/Firebase/firebaseConfig'; // Adjust path as per your project structure
+import GoogleLogin from '../../../app/Auth/login'; 
 
 const db = getFirestore(); // Initialize Firestore
 
@@ -133,6 +134,7 @@ const Header = () => {
                         <span className="text-blue-400 text-2xl font-extrabold">PulseZest-Learning</span>
                       </div>
                       <div className="w-100">
+                        <GoogleLogin/>
                         <Login onLogin={handleLogin} />
                       </div>
                     </div>
