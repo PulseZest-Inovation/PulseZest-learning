@@ -202,7 +202,7 @@ const DesktopMyCourses = () => {
   };
 
   const handleVideoSelect = async (videoLink, topicDescription, index) => {
-    setSelectedVideo(videoLink.link);
+    setSelectedVideo(videoLink.link); // Set the selected video
     setSelectedTopicDescription(topicDescription);
     setSelectedVideoDescription(videoLink.description);
     videoRef.current.index = index;
@@ -212,15 +212,18 @@ const DesktopMyCourses = () => {
       await saveVideoProgress(selectedCourse.id, videoLink.link, 0);  // Initialize with 0%
     }
     
-    window.localStorage.setItem('currentVideo', videoLink.link);
+    window.localStorage.setItem('currentVideo', videoLink.link); // Save the selected video to local storage
   };
 
   useEffect(() => {
-    const currentVideo = window.localStorage.getItem('currentVideo');
+    const currentVideo = window.localStorage.getItem('currentVideo'); // Retrieve the last watched video from local storage
     if (currentVideo) {
-      setSelectedVideo(currentVideo);
+      setSelectedVideo(currentVideo); // Set the last watched video as the selected video
+    } else if (selectedCourse?.chapters?.length > 0 && selectedCourse.chapters[0].topics[0]?.videoLinks?.length > 0){
+        // Set default video if no video was saved as last watched
+        setSelectedVideo(selectedCourse.chapters[0].topics[0].videoLinks[0]?.link);
     }
-  }, []);
+  }, [selectedCourse]);
 
   const handleTimeUpdate = () => {
     if (selectedVideo && videoProgress[selectedVideo] !== undefined && videoProgress[selectedVideo] < 100) {
@@ -253,6 +256,12 @@ const DesktopMyCourses = () => {
         videoRef.current.removeEventListener('timeupdate', handleTimeUpdate);
       }
     };
+  }, [selectedVideo]);
+
+  useEffect(() => { // Autoplay the last watched video when course is selected
+    if (selectedVideo && videoRef.current) { // Check if videoRef.current is not null
+      videoRef.current.play();
+    }
   }, [selectedVideo]);
 
   if (loading) {
@@ -330,7 +339,9 @@ const DesktopMyCourses = () => {
                             {topic.videoLinks.map((videoLink, videoIndex) => (
                               <div
                                 key={videoIndex}
-                                className="p-2 bg-gray-700 text-gray-300 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                                className={`p-2 bg-gray-700 text-gray-300 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white transition-colors duration-300 ${
+                                  selectedVideo === videoLink.link ? 'bg-blue-700 text-white' : ''
+                                }`} // Add highlighting for the selected video
                                 onClick={() => handleVideoSelect(videoLink, topic.topicDescription, videoIndex)}
                               >
                                 <div className="flex justify-between">
