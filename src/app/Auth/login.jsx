@@ -31,7 +31,7 @@ const Login = ({ onClose, onLogin }) => {
         name: user.displayName,
         email: user.email,
         suid: generateCuid(),
-        userId: user.uid,
+        uid: user.uid,
       });
       console.log('User data saved successfully');
     } catch (error) {
