@@ -10,7 +10,7 @@ import Header from './Header';
 import DesktopMyCourses from './my-course/@Desktop/page';
 import NotificationDesktopScreen from './notification/layout';
 import DekstopProfileScreen from './profile/@Desktop/page';
-import SettignDesktopPage from './setting/@Desktop/page';
+import SettignDesktopPage from './settings/@Desktop/page';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('courses');
