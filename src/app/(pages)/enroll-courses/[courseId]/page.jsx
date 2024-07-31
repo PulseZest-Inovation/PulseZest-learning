@@ -17,10 +17,11 @@ const VideoPlayer = () => {
   const [expandedChapters, setExpandedChapters] = useState({});
   const [expandedTopics, setExpandedTopics] = useState({});
   const [videoProgress, setVideoProgress] = useState({});
-  const [playbackSpeed, setPlaybackSpeed] = useState(1.0); // Default playback speed
+  const [playbackSpeed, setPlaybackSpeed] = useState(1.0);  // Default playback speed
   const videoRef = useRef(null);
   const router = useRouter();
   const [userUid, setUserUid] = useState(null);
+
 
   useEffect(() => {
     const getUserUid = () => {
@@ -30,7 +31,7 @@ const VideoPlayer = () => {
         } else {
           // User is signed out
           setUserUid(null);
-          router.push('/login'); // Redirect to login page or any other handling
+          router.push('/login');  // Redirect to login page or any other handling
         }
       });
     };
@@ -122,6 +123,7 @@ const VideoPlayer = () => {
       }
     }
   }, [selectedVideo, videoProgress]);
+  
 
   const findVideoByLink = (link, chapters) => {
     for (const chapter of chapters || course?.chapters || []) {
@@ -173,112 +175,81 @@ const VideoPlayer = () => {
     }));
   };
 
-  const unlockNextVideo = async () => {
-    const currentChapterIndex = course.chapters.findIndex(chapter => 
-      chapter.topics.some(topic => 
-        topic.videoLinks.some(video => video.link === selectedVideo.link)
-      )
-    );
-    const currentTopicIndex = course.chapters[currentChapterIndex].topics.findIndex(topic => 
-      topic.videoLinks.some(video => video.link === selectedVideo.link)
-    );
-    const currentVideoIndex = course.chapters[currentChapterIndex].topics[currentTopicIndex].videoLinks.findIndex(video => video.link === selectedVideo.link);
+  const handleEnded = async () => {
+    const currentChapter = selectedCourse.chapters.find((chapter) => chapter.topics.some((topic) => topic.videoLinks.some((link) => link.link === selectedVideo)));
+    const currentTopic = currentChapter.topics.find((topic) => topic.videoLinks.some((link) => link.link === selectedVideo));
+    const videoIndex = currentTopic.videoLinks.findIndex((link) => link.link === selectedVideo);
 
-    const nextVideoIndex = currentVideoIndex + 1;
-    if (nextVideoIndex < course.chapters[currentChapterIndex].topics[currentTopicIndex].videoLinks.length) {
-      const nextVideo = course.chapters[currentChapterIndex].topics[currentTopicIndex].videoLinks[nextVideoIndex];
-      setSelectedVideo(nextVideo);
-      setSelectedVideoDescription(nextVideo.description || 'No description available');
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play();
-      }
+    // Mark the video as 100% complete
+    await saveVideoProgress(selectedCourse.id, selectedVideo, 100);
+
+    // Move to the next video
+    if (videoIndex < currentTopic.videoLinks.length - 1) {
+      setSelectedVideo(currentTopic.videoLinks[videoIndex + 1].link);
     } else {
-      const nextTopicIndex = currentTopicIndex + 1;
-      if (nextTopicIndex < course.chapters[currentChapterIndex].topics.length) {
-        const nextTopic = course.chapters[currentChapterIndex].topics[nextTopicIndex];
-        if (nextTopic.videoLinks.length > 0) {
-          const nextVideo = nextTopic.videoLinks[0];
-          setSelectedVideo(nextVideo);
-          setSelectedVideoDescription(nextVideo.description || 'No description available');
-          if (videoRef.current) {
-            videoRef.current.currentTime = 0;
-            videoRef.current.play();
-          }
-        }
+      // Move to the next topic or next chapter
+      const topicIndex = currentChapter.topics.findIndex((topic) => topic === currentTopic);
+      const chapterIndex = selectedCourse.chapters.findIndex((chapter) => chapter === currentChapter);
+
+      if (topicIndex < currentChapter.topics.length - 1) {
+        setSelectedVideo(currentChapter.topics[topicIndex + 1].videoLinks[0].link);
+      } else if (chapterIndex < selectedCourse.chapters.length - 1) {
+        setSelectedVideo(selectedCourse.chapters[chapterIndex + 1].topics[0].videoLinks[0].link);
       } else {
-        const nextChapterIndex = currentChapterIndex + 1;
-        if (nextChapterIndex < course.chapters.length) {
-          const nextChapter = course.chapters[nextChapterIndex];
-          if (nextChapter.topics.length > 0) {
-            const nextTopic = nextChapter.topics[0];
-            if (nextTopic.videoLinks.length > 0) {
-              const nextVideo = nextTopic.videoLinks[0];
-              setSelectedVideo(nextVideo);
-              setSelectedVideoDescription(nextVideo.description || 'No description available');
-              if (videoRef.current) {
-                videoRef.current.currentTime = 0;
-                videoRef.current.play();
-              }
-            }
-          }
-        }
+        setSelectedVideo(null); // No more chapters or topics left
       }
     }
   };
 
+
   const saveVideoProgress = async (userUid, courseId, videoLink, progress) => {
     console.log('Saving video progress...');
-
+  
     try {
       // Create a reference to the progress document
       const videoProgressRef = doc(db, 'users', userUid, 'courses', courseId, 'videoProgress', 'progress');
-
+      
       // Fetch existing video progress data
       const docSnap = await getDoc(videoProgressRef);
       const existingData = docSnap.exists() ? docSnap.data() : {};
-
-      // Check if current video progress exists and is already completed
-      if (existingData[videoLink]?.completed) return;
-
+      
       // Update the progress data
       const updatedData = {
         ...existingData,
-        [videoLink]: {
-          ...progress,
-          completed: progress.progress === 100,
+        [videoLink]: progress,
+        completed: {
+          ...existingData.completed,
+          [videoLink]: progress === 100 ? true : existingData.completed ? existingData.completed[videoLink] : false,
         },
         lastWatched: videoLink,
       };
-
+  
       // Save the updated progress data to Firestore
       await setDoc(videoProgressRef, updatedData, { merge: true });
-
+  
       console.log('Video progress saved successfully');
     } catch (error) {
       console.error('Error saving video progress:', error);
     }
   };
+  
 
   const handleProgressUpdate = (event) => {
     const currentTime = event.target.currentTime;
     const duration = event.target.duration;
     const progress = (currentTime / duration) * 100;
-
+    
     if (selectedVideo && selectedVideo.link) {
       const videoLink = selectedVideo.link;
-      saveVideoProgress(userUid, courseId, videoLink, { time: currentTime, progress });
-      
-      // Check if video is finished and play next video
-      if (progress === 100) {
-        saveVideoProgress(userUid, courseId, videoLink, { time: currentTime, progress }); // Save progress on 100% completion
-        unlockNextVideo();
-      }
+      saveVideoProgress(userUid, courseId, videoLink, progress);
+    } else {
+      console.error('Selected video or video link is missing.');
     }
   };
-
+  
+  
   const handleBackToCourses = () => {
-    router.push(`/dashboard/my-courses`);
+    router.push(`/dashboard/my-course`);
   };
 
   const handlePlaybackSpeedChange = (speed) => {
@@ -323,10 +294,7 @@ const VideoPlayer = () => {
                 ref={videoRef}
                 autoPlay
                 onPause={handleProgressUpdate}
-                onEnded={() => {
-                  saveVideoProgress(userUid, courseId, selectedVideo.link, { time: videoRef.current.currentTime, progress: 100 });
-                  unlockNextVideo();
-                }}
+                onEnded={() => saveVideoProgress(courseId, selectedVideo.link, 100)}
               >
                 Your browser does not support the video tag.
               </video>
