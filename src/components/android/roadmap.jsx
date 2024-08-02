@@ -81,7 +81,7 @@ const Roadmap = () => {
   return (
     <div style={pageStyles.container}>
       <header style={pageStyles.header}>
-        Web Development Roadmap
+        Android Development Roadmap
       </header>
 
       {!selectedRoadmap ? (
@@ -113,7 +113,7 @@ const Roadmap = () => {
           <div style={pageStyles.imageContainer}>
             {selectedRoadmap === 'frontend' ? (
               <Image
-                src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/divyansh-store%2FColorful%20Modern%20Business%20Chronology%20Timeline%20Infographic.png?alt=media&token=5648d9f0-e6c1-415e-b33c-3bca97554b6e"
+                src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/divyansh-store%2Fapp%20of%20learning%2FandroidFront.png?alt=media&token=3911ab33-406b-4c44-87e5-51a9a49fae94"
                 alt="Frontend"
                 width={800}
                 height={600}
@@ -121,7 +121,7 @@ const Roadmap = () => {
               />
             ) : (
               <Image
-                src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/divyansh-store%2Fbackend-2.png?alt=media&token=20866306-ee75-4235-9bf1-11206066338b"
+                src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/divyansh-store%2Fapp%20of%20learning%2FandroidBack.png?alt=media&token=d4b59bea-615c-4009-95fa-af91ce183949"
                 alt="Backend"
                 width={800}
                 height={600}

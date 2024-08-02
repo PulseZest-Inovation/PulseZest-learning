@@ -19,7 +19,7 @@ const SectionPage = () => {
                 color: 'transparent',
                 textAlign: 'center',
             }}>
-                Magic of Web Dev
+                Magic of Android Dev
             </h1>
         </div>
     );
