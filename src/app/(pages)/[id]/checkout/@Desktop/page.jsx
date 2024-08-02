@@ -113,8 +113,6 @@ const CheckoutPage = ({ params }) => {
             transactionId,
             amount,
             name,
-          
-          
             courseId,
             currency,
             date,
