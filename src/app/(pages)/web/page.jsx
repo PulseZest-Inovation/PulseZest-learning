@@ -117,59 +117,58 @@ const bubbleStyles = `
 
 const Web = () => {
   const [hoveredLetterIndex, setHoveredLetterIndex] = useState(-1);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    // Ensure that the component is rendered only on the client side
-    setIsClient(true);
-  }, []);
 
   const welcomeMessage = 'Welcome to Web Development Course!';
   const letters = welcomeMessage.split('');
 
+  useEffect(() => {
+    // Only set state when client-side
+    if (typeof window !== 'undefined') {
+      // Client-side code here
+    }
+  }, []);
+
   return (
-    <div>
+    <div style={pageStyles.container}>
       <style>{bubbleStyles}</style>
-      <div style={pageStyles.container}>
-        <div className="welcome-box">
-          {letters.map((letter, index) => (
-            <span
-              key={index}
-              className="welcome-letter"
-              onMouseEnter={() => setHoveredLetterIndex(index)}
-              onMouseLeave={() => setHoveredLetterIndex(-1)}
-              style={
-                hoveredLetterIndex === index
-                  ? {
-                      transform: `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px)`,
-                    }
-                  : { transform: 'translate(0, 0)' }
-              }
-            >
-              {letter}
-            </span>
-          ))}
+      <div className="welcome-box">
+        {letters.map((letter, index) => (
+          <span
+            key={index}
+            className="welcome-letter"
+            onMouseEnter={() => setHoveredLetterIndex(index)}
+            onMouseLeave={() => setHoveredLetterIndex(-1)}
+            style={
+              hoveredLetterIndex === index
+                ? {
+                    transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`,
+                  }
+                : { transform: 'translate(0, 0)' }
+            }
+          >
+            {letter}
+          </span>
+        ))}
+      </div>
+      <br /><br />
+      <div style={pageStyles.mediaWrapper}>
+        <div style={pageStyles.imageWrapper}>
+          <Image
+            src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/divyansh-store%2FwebDevCourse.png?alt=media&token=7b8c9a5b-05e2-4c62-966a-3433b0e0020d"
+            alt="Web Development"
+            layout="fill"
+            objectFit="cover"
+            className="bubble-image"
+          />
         </div>
-        <br/><br/>
-        <div style={pageStyles.mediaWrapper}>
-          <div style={pageStyles.imageWrapper}>
-            <Image
-              src="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/divyansh-store%2FwebDevCourse.png?alt=media&token=7b8c9a5b-05e2-4c62-966a-3433b0e0020d"
-              alt="Web Development"
-              layout="fill"
-              objectFit="cover"
-              className="bubble-image"
+        <div style={pageStyles.videoWrapper}>
+          <div style={pageStyles.playerWrapper}>
+            <ReactPlayer
+              url="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/Full_React%2FReact%20full%20development%20-%20Intro%20Video.mp4?alt=media&token=bf569c92-fb84-4d2c-9a19-41300e064494"
+              controls={true}
+              width="100%"
+              height="70%"
             />
-          </div>
-          <div style={pageStyles.videoWrapper}>
-            <div style={pageStyles.playerWrapper}>
-              <ReactPlayer
-                url="https://firebasestorage.googleapis.com/v0/b/pulsezest.appspot.com/o/Full_React%2FReact%20full%20development%20-%20Intro%20Video.mp4?alt=media&token=bf569c92-fb84-4d2c-9a19-41300e064494"
-                controls={true}
-                width="100%"
-                height="70%"
-              />
-            </div>
           </div>
         </div>
       </div>
