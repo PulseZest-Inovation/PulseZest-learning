@@ -63,15 +63,15 @@ const ContactForm = () => {
               </Typography>
               <Box display="flex" alignItems="center" mb={2}>
                 <Email className="mr-2 text-white" />
-                <Typography className="text-white">info@pulsezest.com</Typography>
+                <Typography className="text-white">contact@pulsezest.com</Typography>
               </Box>
               <Box display="flex" alignItems="center" mb={2}>
                 <Phone className="mr-2 text-white" />
-                <Typography className="text-white">+91 6396219233, +91 8126663271</Typography>
+                <Typography className="text-white">+91 6396219233, +91 7248457558</Typography>
               </Box>
               <Box display="flex" alignItems="center" mb={2}>
                 <LocationOn className="mr-2 text-white" />
-                <Typography className="text-white">Bareilly</Typography>
+                <Typography className="text-white">69/2, Jagatpur Road, Pashupati vihar colony, Bareilly, UttarPradesh, 243006</Typography>
               </Box>
               <Box mt={2}>
                 <IconButton href="https://linkedin.com" target="_blank" className="text-white">
