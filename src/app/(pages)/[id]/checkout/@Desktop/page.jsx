@@ -248,66 +248,67 @@ const CheckoutPage = ({ params }) => {
             </div>
           </div>
         );
-        case 2:
-          return (
-            <>
-              <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                This is the payment step where users can complete their payment.
-              </Typography>
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Input
-                    type="text"
-                    placeholder="Enter coupon code"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    style={{
-                      backgroundColor: '#f1f1f1',
-                      border: 'none',
-                      padding: '8px',
-                      borderRadius: '4px',
-                      marginRight: '10px'
-                    }}
-                    disabled={discountedPrice !== null}
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={applyCoupon}
-                    style={{ backgroundColor: '#001d3d' }}
-                    disabled={discountedPrice !== null}
-                  >
-                    Apply
-                  </Button>
-                </div>
-                {discountedPrice !== null && (
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: 'green',
-                      marginTop: '10px',
-                      opacity: 0.8
-                    }}
-                  >
-                    Coupon Applied
-                  </Typography>
-                )}
+      case 2:
+        return (
+          <>
+            <Typography variant="body1" style={{ marginBottom: '10px' }}>
+              This is the payment step where users can complete their payment.
+            </Typography>
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  style={{
+                    backgroundColor: '#f1f1f1',
+                    border: 'none',
+                    padding: '8px',
+                    borderRadius: '4px',
+                    marginRight: '10px'
+                  }}
+                  disabled={discountedPrice !== null}
+                />
+                <Button
+                  variant="contained"
+                  onClick={applyCoupon}
+                  style={{ backgroundColor: '#001d3d' }}
+                  disabled={discountedPrice !== null}
+                >
+                  Apply
+                </Button>
               </div>
-              {couponError && (
-                <Typography variant="body2" color="error" style={{ marginBottom: '10px' }}>
-                  {couponError}
-                </Typography>
-              )}
-              <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                <strong>Original Price:</strong> ₹{courseData?.salePrice}
-              </Typography>
               {discountedPrice !== null && (
-                <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                  <strong>Discounted Price:</strong> ₹{discountedPrice}
+                <Typography
+                  variant="body2"
+                  style={{
+                    color: 'green',
+                    marginTop: '10px',
+                    opacity: 0.8
+                  }}
+                >
+                  Coupon Applied
                 </Typography>
               )}
-            </>
-          );
-        }}
+            </div>
+            {couponError && (
+              <Typography variant="body2" color="error" style={{ marginBottom: '10px' }}>
+                {couponError}
+              </Typography>
+            )}
+            <Typography variant="body1" style={{ marginBottom: '10px' }}>
+              <strong>Original Price:</strong> ₹{courseData?.salePrice}
+            </Typography>
+            {discountedPrice !== null && (
+              <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                <strong>Discounted Price:</strong> ₹{discountedPrice}
+              </Typography>
+            )}
+          </>
+        );
+    }
+  }
   return (
     <div className="checkout-page" style={{ backgroundColor: '#001d3d', color: '#333333', minHeight: '100vh', padding: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -337,8 +338,8 @@ const CheckoutPage = ({ params }) => {
             {renderStepContent(activeStep)}
           </div>
 
-          {/* Navigation Buttons */}
-          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
+         {/* Navigation Buttons */}
+         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
             <Button disabled={activeStep === 0 || (activeStep === 1 && (!user || !agreed))} onClick={handleBack} variant="outlined" style={{ color: '#001d3d', borderColor: '#001d3d' }}>Back</Button>
             <Button
               disabled={!user || (activeStep === 1 && !agreed)} // Disable if not agreed in step 1
@@ -354,6 +355,7 @@ const CheckoutPage = ({ params }) => {
             </Button>
           </div>
         </div>
+
 
         {/* Right Side - Course and Student Details */}
         <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '20px' }}>
