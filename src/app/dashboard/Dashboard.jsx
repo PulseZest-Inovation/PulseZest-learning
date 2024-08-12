@@ -3,7 +3,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation'; // For programmatic navigation
 import { useEffect, useState } from 'react';
-import { FaBars, FaBook, FaChartLine, FaCog, FaArrowAltCircleLeft, FaUser, FaAward } from 'react-icons/fa'; // Added FaAward for Achievements
+import { FaBars, FaBook, FaChartLine, FaCog, FaArrowAltCircleLeft, FaUser, FaAward } from 'react-icons/fa';
+import { IoChatbubblesOutline } from "react-icons/io5"; // Added FaAward for Achievements
 import { auth, db } from '../../utils/Firebase/firebaseConfig';
 import Header from './Header';
 import DesktopMyCourses from './my-course/@Desktop/page';
@@ -11,6 +12,8 @@ import NotificationDesktopScreen from './notification/layout';
 import DekstopProfileScreen from './profile/@Desktop/page';
 import SettignDesktopPage from './settings/@Desktop/page';
 import AchievementsDesktopPage from './achievements/@Desktop/page'; // Import Achievements component
+import DiscordButton from '@/components/DiscordButton';
+import DoubtSolvingLayout from './doubt-solving/@Desktop/page';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('courses');
@@ -61,6 +64,7 @@ const Dashboard = () => {
     if (path.includes('notifications')) setActiveTab('notifications');
     if (path.includes('profile')) setActiveTab('Profile');
     if (path.includes('settings')) setActiveTab('settings');
+    if (path.includes('doubt-solving')) setActiveTab('doubt-solving');
     if (path.includes('achievements')) setActiveTab('achievements'); // Add achievements check
   }, []);
 
@@ -89,7 +93,9 @@ const Dashboard = () => {
       case 'settings':
         return <SettignDesktopPage />;
       case 'achievements':
-        return <AchievementsDesktopPage />; // Render Achievements component
+        return <AchievementsDesktopPage />;
+      case 'doubt-solving':
+        return <DoubtSolvingLayout />;  
       default:
         return <Courses />;
     }
@@ -125,15 +131,6 @@ const Dashboard = () => {
             {isSidebarOpen && 'Profile'}
           </button>
           <button
-            onClick={() => handleTabChange('settings')}
-            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
-              activeTab === 'settings' ? 'bg-indigo-400 shadow-lg' : ''
-            }`}
-          >
-            <FaCog className="mr-3" />
-            {isSidebarOpen && 'Settings'}
-          </button>
-          <button
             onClick={() => handleTabChange('achievements')}
             className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
               activeTab === 'achievements' ? 'bg-indigo-400 shadow-lg' : ''
@@ -142,6 +139,31 @@ const Dashboard = () => {
             <FaAward className="mr-3" />
             {isSidebarOpen && 'Achievements'}
           </button>
+
+          <button
+            onClick={() => handleTabChange('doubt-solving')}
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
+              activeTab === 'doubt-solving' ? 'bg-indigo-400 shadow-lg' : ''
+            }`}
+          >
+            <IoChatbubblesOutline className="mr-3" />
+            {isSidebarOpen && 'doubt-solving'}
+          </button>
+          
+          <button
+            onClick={() => handleTabChange('settings')}
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
+              activeTab === 'settings' ? 'bg-indigo-400 shadow-lg' : ''
+            }`}
+          >
+            <FaCog className="mr-3" />
+            {isSidebarOpen && 'Settings'}
+          </button>
+
+        
+
+          <DiscordButton/>
+         
         </div>
       </div>
       <div className={`flex-1 transition-all duration-700 ease-in-out ${isSidebarOpen ? 'ml-1/6' : 'ml-20'}`}>
