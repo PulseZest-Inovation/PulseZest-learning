@@ -1,43 +1,40 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function DesktopDoubtSolving() {
+  const pathname = usePathname();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // Check if Tawk API is already loaded
-    if (typeof window !== 'undefined' && !window.Tawk_API) {
-      var Tawk_API = Tawk_API || {};
-      var Tawk_LoadStart = new Date();
-      (function () {
-        var s1 = document.createElement('script');
-        var s0 = document.getElementsByTagName('script')[0];
-        s1.async = true;
-        s1.src = 'https://embed.tawk.to/6510ab840f2b18434fda5678/1i4cnvv37'; // Replace with your Tawk.to script URL
-        s1.charset = 'UTF-8';
-        s1.setAttribute('crossorigin', '*');
-        s0.parentNode.insertBefore(s1, s0);
-      })();
-    }
-  }, []);
+    setLoading(true); // Set loading to true when the component mounts
+  }, [pathname]);
+
+  const handleLoad = () => {
+    setLoading(false); // Set loading to false when the iframe has loaded
+  };
+
+  if (pathname !== '/dashboard/doubt-solving') {
+    return null;
+  }
 
   return (
-    <div className="relative min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="text-center p-4">
-        <h1 className="text-2xl font-semibold mb-4">Doubt Solving Desktop</h1>
-        {/* Other content of the component */}
-      </div>
-
-      {/* Chat container */}
-      <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-80 h-96 bg-white border rounded-lg shadow-lg overflow-hidden pointer-events-auto">
-          <div className="flex flex-col h-full">
-            <div className="flex-1 p-4 overflow-auto">
-              {/* Chat area */}
-              <div id="tawk-chat-container" className="w-full h-full" />
-            </div>
-          </div>
+    <div className="min-h-screen flex items-center justify-center relative">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10">
+          <div className="w-16 h-16 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
         </div>
-      </div>
+      )}
+      <iframe
+        src="https://tawk.to/chat/6510ab840f2b18434fda5678/1i530turq"
+        width="400"
+        height="600"
+        frameBorder="0"
+        className="shadow-lg border rounded-lg"
+        allow="microphone; camera"
+        onLoad={handleLoad}
+      />
     </div>
   );
 }

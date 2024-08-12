@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Home /> {/* Render Home component directly */}
         {children} {/* Render other page content here */}
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               function loadTawkTo() {
@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
               });
             `,
           }}
-        />
+        /> */}
       </body>
     </html>
   );
