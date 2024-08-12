@@ -3,14 +3,14 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation'; // For programmatic navigation
 import { useEffect, useState } from 'react';
-import { FaBars, FaBook, FaChartLine, FaCog, FaArrowAltCircleLeft, FaUser } from 'react-icons/fa'; // Added FaBars and FaTimes for toggle icons
+import { FaBars, FaBook, FaChartLine, FaCog, FaArrowAltCircleLeft, FaUser, FaAward } from 'react-icons/fa'; // Added FaAward for Achievements
 import { auth, db } from '../../utils/Firebase/firebaseConfig';
-import AchievementsPage from './achivment/layout';
 import Header from './Header';
 import DesktopMyCourses from './my-course/@Desktop/page';
 import NotificationDesktopScreen from './notification/layout';
 import DekstopProfileScreen from './profile/@Desktop/page';
 import SettignDesktopPage from './settings/@Desktop/page';
+import AchievementsDesktopPage from './achievements/@Desktop/page'; // Import Achievements component
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('courses');
@@ -58,10 +58,10 @@ const Dashboard = () => {
     // Update the activeTab based on the pathname
     const path = window.location.pathname;
     if (path.includes('my-course')) setActiveTab('my-course');
-    if (path.includes('achievements')) setActiveTab('Achivment');
     if (path.includes('notifications')) setActiveTab('notifications');
     if (path.includes('profile')) setActiveTab('Profile');
     if (path.includes('settings')) setActiveTab('settings');
+    if (path.includes('achievements')) setActiveTab('achievements'); // Add achievements check
   }, []);
 
   if (!isDesktop) {
@@ -82,14 +82,14 @@ const Dashboard = () => {
     switch (activeTab) {
       case 'my-course':
         return <DesktopMyCourses />;
-      case 'Achivment':
-        return <AchievementsPage />;
       case 'notifications':
         return <NotificationDesktopScreen />;
       case 'Profile':
         return <DekstopProfileScreen />;
       case 'settings':
         return <SettignDesktopPage />;
+      case 'achievements':
+        return <AchievementsDesktopPage />; // Render Achievements component
       default:
         return <Courses />;
     }
@@ -116,15 +116,6 @@ const Dashboard = () => {
             {isSidebarOpen && 'Courses'}
           </button>
           <button
-            onClick={() => handleTabChange('Achivment')}
-            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
-              activeTab === 'Achivment' ? 'bg-indigo-400 shadow-lg' : ''
-            }`}
-          >
-            <FaChartLine className="mr-3" />
-            {isSidebarOpen && 'Achievement'}
-          </button>
-          <button
             onClick={() => handleTabChange('Profile')}
             className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
               activeTab === 'Profile' ? 'bg-indigo-400 shadow-lg' : ''
@@ -141,6 +132,15 @@ const Dashboard = () => {
           >
             <FaCog className="mr-3" />
             {isSidebarOpen && 'Settings'}
+          </button>
+          <button
+            onClick={() => handleTabChange('achievements')}
+            className={`flex items-center p-4 hover:bg-indigo-400 rounded-lg transition-all duration-500 ease-in-out transform hover:translate-x-1 ${
+              activeTab === 'achievements' ? 'bg-indigo-400 shadow-lg' : ''
+            }`}
+          >
+            <FaAward className="mr-3" />
+            {isSidebarOpen && 'Achievements'}
           </button>
         </div>
       </div>
