@@ -39,6 +39,12 @@ const PhoneMyCourses = () => {
         getUserUid();
     }, [router]);
 
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.playbackRate = playbackSpeed;
+        }
+    }, [playbackSpeed]);
+
     const fetchUserCourses = async (uid) => {
         try {
             const userCoursesRef = collection(db, 'users', uid, 'courses');
@@ -100,14 +106,14 @@ const PhoneMyCourses = () => {
                             id: `topic-${chapterIndex + 1}-${topicIndex + 1}`,
                             videoLinks: (topic.videoLinks || []).map((video, videoIndex) => ({
                                 ...video,
-                                id: `video-${chapterIndex + 1}-${topicIndex + 1}-${videoIndex + 1}`
+                                id: `video-${chapterIndex + 1}-${topicIndex + 1}-${videoIndex + 1}`,
                             }))
                         }))
                     );
                     return {
                         chapterName: chapter.chapterName,
                         topics,
-                        id: `chapter-${chapterIndex + 1}`
+                        id: `chapter-${chapterIndex + 1}`,
                     };
                 })
             );
@@ -118,7 +124,7 @@ const PhoneMyCourses = () => {
                 description: description || 'No description available',
                 thumbnail: thumbnail || 'https://via.placeholder.com/600x400',
                 chapters: updatedChapters,
-                courseLevel: courseLevel || 'Not Specified'
+                courseLevel: courseLevel || 'Not Specified',
             });
 
             await fetchVideoProgress(courseId);
@@ -205,14 +211,14 @@ const PhoneMyCourses = () => {
     const toggleChapter = (chapterName) => {
         setExpandedChapters((prevState) => ({
             ...prevState,
-            [chapterName]: !prevState[chapterName]
+            [chapterName]: !prevState[chapterName],
         }));
     };
 
     const toggleTopic = (chapterName, topicName) => {
         setExpandedTopics((prevState) => ({
             ...prevState,
-            [`${chapterName}-${topicName}`]: !prevState[`${chapterName}-${topicName}`]
+            [`${chapterName}-${topicName}`]: !prevState[`${chapterName}-${topicName}`],
         }));
     };
 
@@ -221,19 +227,19 @@ const PhoneMyCourses = () => {
             return;
         }
 
-          // Always update progress to 100% if video is fully watched, even if it's watched again
-    if (completedVideos.includes(video.id)) {
-      fullWatched = true;
-      progress = 100;
-    } else if (fullWatched) {
-      progress = 100;
-    }
+        // Always update progress to 100% if video is fully watched, even if it's watched again
+        if (completedVideos.includes(video.id)) {
+            fullWatched = true;
+            progress = 100;
+        } else if (fullWatched) {
+            progress = 100;
+        }
 
         const videoProgressRef = doc(db, 'users', userUid, 'courses', selectedCourse.id, 'videoProgress', video.id);
         await setDoc(videoProgressRef, {
             progress,
             fullWatched: progress === 100,
-            updatedAt: new Date()
+            updatedAt: new Date(),
         }, { merge: true });
 
         if (progress === 100) {
@@ -242,7 +248,7 @@ const PhoneMyCourses = () => {
 
         setVideoProgress((prev) => ({
             ...prev,
-            [video.id]: progress
+            [video.id]: progress,
         }));
     };
 
@@ -313,13 +319,18 @@ const PhoneMyCourses = () => {
         return false;
     };
 
-    const handlePlaybackSpeedChange = (speed) => {
+    const handleVideoLoaded = () => {
         if (videoRef.current) {
-            videoRef.current.playbackRate = speed;
-            setPlaybackSpeed(speed);
+            videoRef.current.playbackRate = playbackSpeed;
         }
     };
-
+    
+    const handlePlaybackSpeedChange = (speed) => {
+        setPlaybackSpeed(speed);
+        if (videoRef.current) {
+            videoRef.current.playbackRate = speed;
+        }
+    };
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -379,22 +390,27 @@ const PhoneMyCourses = () => {
                 >
                     Back to Video Selector
                 </button>
-                <div ref={videoRef} className="md:w-2/3 p-2 rounded-lg shadow-lg relative bg-white">
-                    <video
-                        key={selectedVideo.link}
-                        src={selectedVideo.link}
-                        controls
-                        className={`w-full h-64 object-cover rounded-lg shadow-lg ${selectedVideo ? 'border-2 border-blue-500' : ''}`}
-                        disablePictureInPicture
-                        onContextMenu={(e) => e.preventDefault()}
-                        controlsList="nodownload noremoteplayback noplaybackrate noautohide"
-                        ref={videoRef}
-                        onPause={handleVideoPause}
-                        onEnded={handleVideoEnded}
-                        autoPlay
-                    >
-                        Your browser does not support the video tag.
-                    </video>
+                <div>
+            {selectedVideo && (
+                <video
+                    ref={videoRef}
+                    key={selectedVideo.link}
+                    src={selectedVideo.link}
+                    controls
+                    className="w-full h-64 object-cover rounded-lg shadow-lg"
+                    onLoadedMetadata={handleVideoLoaded} // Set playback speed when metadata is loaded
+                    onPlay={() => {
+                        if (videoRef.current) {
+                            videoRef.current.playbackRate = playbackSpeed;
+                        }
+                    }}
+                    onPause={handleVideoPause}
+                    onEnded={handleVideoEnded}
+                    autoPlay
+                >
+                    Your browser does not support the video tag.
+                </video>
+            )}
                     <h1 className="font-bold text-2xl mt-4 text-black">Description</h1>
                     {selectedVideoDescription && (
                         <div
@@ -406,11 +422,10 @@ const PhoneMyCourses = () => {
                         {[0.5, 1.0, 1.5, 2.0].map((speed) => (
                             <button
                                 key={speed}
-                                className={`px-4 py-2 rounded-full transition-all duration-300 ${
-                                    playbackSpeed === speed
+                                className={`px-4 py-2 rounded-full transition-all duration-300 ${playbackSpeed === speed
                                         ? 'bg-blue-500 text-white font-semibold'
                                         : 'bg-gray-200 text-gray-700 hover:bg-blue-400 hover:text-white'
-                                }`}
+                                    }`}
                                 onClick={() => handlePlaybackSpeedChange(speed)}
                             >
                                 {speed}x
@@ -458,13 +473,12 @@ const PhoneMyCourses = () => {
                                                         {topic.videoLinks.map((video) => (
                                                             <div
                                                                 key={video.id}
-                                                                className={`p-2 rounded-lg cursor-pointer transition-colors duration-300 ${
-                                                                  selectedVideo?.link === video.link
-                                                                    ? 'bg-blue-700 text-white border-2 border-blue-500'
-                                                                    : !canWatch(video)
-                                                                    ? 'bg-gray-500 text-gray-400 cursor-not-allowed'
-                                                                    : 'bg-gray-700 text-gray-300 hover:bg-blue-500 hover:text-white'
-                                                                }`}
+                                                                className={`p-2 rounded-lg cursor-pointer transition-colors duration-300 ${selectedVideo?.link === video.link
+                                                                        ? 'bg-blue-700 text-white border-2 border-blue-500'
+                                                                        : !canWatch(video)
+                                                                            ? 'bg-gray-500 text-gray-400 cursor-not-allowed'
+                                                                            : 'bg-gray-700 text-gray-300 hover:bg-blue-500 hover:text-white'
+                                                                    }`}
                                                                 onClick={() => handleVideoClick(video)}
                                                             >
                                                                 <div className="flex justify-between items-center">
@@ -472,7 +486,6 @@ const PhoneMyCourses = () => {
                                                                     {completedVideos.includes(video.id) && <FaCheck className="ml-2 text-green-500" />}
                                                                     {!canWatch(video) && <FaLock className="ml-2 text-red-500" />}
                                                                 </div>
-                                                                <p className="text-sm">{video.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
