@@ -144,9 +144,9 @@ const Dashboard = () => {
           </button>
         </div>
       </div>
-      <div className={`transition-all duration-700 ease-in-out ${isSidebarOpen ? 'w-5/6' : 'w-full'}`}>
+      <div className={`flex-1 transition-all duration-700 ease-in-out ${isSidebarOpen ? 'ml-1/6' : 'ml-20'}`}>
         <Header setActiveTab={setActiveTab} />
-        <div className="p-2 text-black">{renderContent()}</div>
+        <div className="p-4 text-black">{renderContent()}</div>
       </div>
     </div>
   );

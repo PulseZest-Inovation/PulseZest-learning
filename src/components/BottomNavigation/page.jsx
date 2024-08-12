@@ -1,6 +1,6 @@
 'use client';
 
-import { BellIcon, BookOpenIcon, DocumentSearchIcon, HomeIcon, UserIcon } from '@heroicons/react/outline';
+import {BookOpenIcon, DocumentSearchIcon, HomeIcon, UserIcon, SparklesIcon   } from '@heroicons/react/outline';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -58,11 +58,11 @@ export default function BottomNavigationBar() {
         <span className="text-xs">Course</span>
       </button>
       <button
-        onClick={() => handleNavigation('/dashboard/notification')}
-        className={getButtonClasses('/dashboard/notification')}
+        onClick={() => handleNavigation('/dashboard/achievements')}
+        className={getButtonClasses('/dashboard/achievements')}
       >
-        <BellIcon className="w-6 h-6" />
-        <span className="text-xs">Notifications</span>
+        <SparklesIcon   className="w-6 h-6" />
+        <span className="text-xs">Achievement</span>
       </button>
       <button
         onClick={() => handleNavigation('/dashboard/profile')}

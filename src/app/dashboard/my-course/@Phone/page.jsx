@@ -53,32 +53,70 @@ const PhoneMyCourses = () => {
 
             const coursePromises = courseIds.map(async (courseId) => {
                 const courseDoc = await getDoc(doc(db, 'courses', courseId));
+                if (!courseDoc.exists()) {
+                    console.warn(`Course with ID ${courseId} does not exist.`);
+                    return null;
+                }
+
                 const courseData = courseDoc.data();
-                const { name, description, thumbnail, chapters, courseLevel } = courseData;
+                const { name, description, thumbnail, chapters = [], courseLevel } = courseData;
 
                 const updatedChapters = await Promise.all(
-                    chapters.map(async (chapter) => {
+                    chapters.map(async (chapter, chapterIndex) => {
                         const topics = await Promise.all(
-                            chapter.topics.map(async (topic) => ({
+                            chapter.topics.map(async (topic, topicIndex) => ({
                                 ...topic,
-                                videoLinks: topic.videoLinks || [],
+                                id: `topic-${chapterIndex + 1}-${topicIndex + 1}`,
+                                videoLinks: (topic.videoLinks || []).map((video, videoIndex) => ({
+                                    ...video,
+                                    id: `video-${chapterIndex + 1}-${topicIndex + 1}-${videoIndex + 1}`,
+                                }))
                             }))
                         );
                         return { ...chapter, topics };
                     })
                 );
 
+                const videoProgressSnapshot = await getDocs(collection(db, 'users', uid, 'courses', courseId, 'videoProgress'));
+                const videoProgress = {};
+                videoProgressSnapshot.forEach((videoDoc) => {
+                    const data = videoDoc.data();
+                    if (data) {
+                        videoProgress[videoDoc.id] = data.progress;  // Store progress by video ID
+                    }
+                });
+
+                let totalVideos = 0;
+                let totalProgress = 0;
+                updatedChapters.forEach((chapter) => {
+                    chapter.topics.forEach((topic) => {
+                        topic.videoLinks.forEach((video) => {
+                            if (video.id) {
+                                totalVideos += 1;
+                                const progress = videoProgress[video.id] !== undefined ? videoProgress[video.id] : 0;
+                                totalProgress += progress;
+                            } else {
+                                console.warn(`Undefined Video ID in course ID ${courseId}`);
+                            }
+                        });
+                    });
+                });
+
+                const completionPercentage = totalVideos > 0 ? Math.round(totalProgress / totalVideos) : 0;
+
                 return {
                     id: courseDoc.id,
-                    name,
-                    description,
-                    thumbnail,
+                    name: name || 'Unnamed Course',
+                    description: description || 'No description available',
+                    thumbnail: thumbnail || 'https://via.placeholder.com/600x400',
                     chapters: updatedChapters,
-                    courseLevel,
+                    courseLevel: courseLevel || 'Not Specified',
+                    completionPercentage
                 };
             });
 
-            setCourses(await Promise.all(coursePromises));
+            const courseList = (await Promise.all(coursePromises)).filter(course => course !== null);
+            setCourses(courseList);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching courses: ', error);
@@ -118,6 +156,33 @@ const PhoneMyCourses = () => {
                 })
             );
 
+            const videoProgressSnapshot = await getDocs(collection(db, 'users', userUid, 'courses', courseId, 'videoProgress'));
+            const videoProgress = {};
+            videoProgressSnapshot.forEach((videoDoc) => {
+                const data = videoDoc.data();
+                if (data) {
+                    videoProgress[videoDoc.id] = data.progress;  // Store progress by video ID
+                }
+            });
+
+            let totalVideos = 0;
+            let totalProgress = 0;
+            updatedChapters.forEach((chapter) => {
+                chapter.topics.forEach((topic) => {
+                    topic.videoLinks.forEach((video) => {
+                        if (video.id) {
+                            totalVideos += 1;
+                            const progress = videoProgress[video.id] !== undefined ? videoProgress[video.id] : 0;
+                            totalProgress += progress;
+                        } else {
+                            console.warn(`Undefined Video ID in course ID ${courseId}`);
+                        }
+                    });
+                });
+            });
+
+            const completionPercentage = totalVideos > 0 ? Math.round(totalProgress / totalVideos) : 0;
+
             setSelectedCourse({
                 id: courseDoc.id,
                 name: name || 'Unnamed Course',
@@ -125,6 +190,7 @@ const PhoneMyCourses = () => {
                 thumbnail: thumbnail || 'https://via.placeholder.com/600x400',
                 chapters: updatedChapters,
                 courseLevel: courseLevel || 'Not Specified',
+                completionPercentage
             });
 
             await fetchVideoProgress(courseId);
@@ -346,7 +412,7 @@ const PhoneMyCourses = () => {
                     <h1 className="text-2xl font-bold text-blue-600">My Courses</h1>
                 </header>
 
-                <main className="p-4 space-y-4">
+                <main className="p-4 pb-[calc(60px+1rem)]">
                     {courses.map((course) => (
                         <div
                             key={course.id}
@@ -362,7 +428,7 @@ const PhoneMyCourses = () => {
                             <h2 className="text-xl font-semibold text-blue-600">{course.name}</h2>
                             <p className="text-gray-700 text-center">{course.description}</p>
                             <div className="flex justify-between w-full text-xs mt-2">
-                                <span className="bg-blue-500 text-white px-3 py-1 rounded-full">{course.completionPercentage?.toFixed(0)}% complete</span>
+                                <span className="bg-blue-500 text-white px-3 py-1 rounded-full">{course.completionPercentage || 0}% complete</span>
                                 <span className="bg-yellow-500 text-white px-3 py-1 rounded-full">{course.courseLevel}</span>
                             </div>
                             <button
@@ -380,7 +446,47 @@ const PhoneMyCourses = () => {
 
     if (selectedVideo) {
         return (
-            <div className="min-h-screen bg-gray-200 p-4">
+            <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 text-gray-800 pb-26">
+                <header className="flex justify-between items-center p-4 bg-white shadow">
+                    <h1 className="text-2xl font-bold text-blue-600">My Courses</h1>
+                </header>
+
+                <main className="p-4 space-y-4 pb-16"> {/* Add pb-16 or adjust as needed */}
+    {courses.map((course) => (
+        <div
+            key={course.id}
+            className={`bg-white rounded-lg shadow-md p-4 flex flex-col items-center space-y-2 relative ${courses.length === 1 ? 'mb-16' : ''}`} // Add mb-16 or adjust as needed
+            >
+            <Image
+                src={course.thumbnail}
+                alt={course.name}
+                width={200}
+                height={120}
+                className="w-full h-33 object-cover rounded-lg mb-4"
+            />
+            <h2 className="text-xl font-semibold text-blue-600">{course.name}</h2>
+            <p className="text-gray-700 text-center">{course.description}</p>
+            <div className="flex justify-between w-full text-xs mt-2">
+                <span className="bg-blue-500 text-white px-3 py-1 rounded-full">{course.completionPercentage || 0}% complete</span>
+                <span className="bg-yellow-500 text-white px-3 py-1 rounded-full">{course.courseLevel}</span>
+            </div>
+            <button
+                className="bg-blue-600 text-white px-4 py-2 rounded-full mt-4 w-full font-semibold hover:bg-blue-700 transition-colors duration-300"
+                onClick={() => handleCourseClick(course)}
+            >
+                Start Learning
+            </button>
+        </div>
+    ))}
+</main>
+
+            </div>
+        );
+    }
+
+    if (selectedVideo) {
+        return (
+            <div className="min-h-screen bg-gray-200 p-4 pb-16">
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-full mb-4"
                     onClick={() => {
@@ -391,26 +497,26 @@ const PhoneMyCourses = () => {
                     Back to Video Selector
                 </button>
                 <div>
-            {selectedVideo && (
-                <video
-                    ref={videoRef}
-                    key={selectedVideo.link}
-                    src={selectedVideo.link}
-                    controls
-                    className="w-full h-64 object-cover rounded-lg shadow-lg"
-                    onLoadedMetadata={handleVideoLoaded} // Set playback speed when metadata is loaded
-                    onPlay={() => {
-                        if (videoRef.current) {
-                            videoRef.current.playbackRate = playbackSpeed;
-                        }
-                    }}
-                    onPause={handleVideoPause}
-                    onEnded={handleVideoEnded}
-                    autoPlay
-                >
-                    Your browser does not support the video tag.
-                </video>
-            )}
+                    {selectedVideo && (
+                        <video
+                            ref={videoRef}
+                            key={selectedVideo.link}
+                            src={selectedVideo.link}
+                            controls
+                            className="w-full h-64 object-cover rounded-lg shadow-lg"
+                            onLoadedMetadata={handleVideoLoaded}
+                            onPlay={() => {
+                                if (videoRef.current) {
+                                    videoRef.current.playbackRate = playbackSpeed;
+                                }
+                            }}
+                            onPause={handleVideoPause}
+                            onEnded={handleVideoEnded}
+                            autoPlay
+                        >
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
                     <h1 className="font-bold text-2xl mt-4 text-black">Description</h1>
                     {selectedVideoDescription && (
                         <div
@@ -438,7 +544,7 @@ const PhoneMyCourses = () => {
     }
 
     return (
-        <div className="min-h-screen p-8 bg-gray-100">
+        <div className="min-h-screen p-8 bg-gray-100 pb-16">
             <button className="bg-blue-500 text-white px-4 py-2 rounded-full mb-4" onClick={() => setSelectedCourse(null)}>
                 Back to My Courses
             </button>

@@ -28,10 +28,7 @@ const DesktopAchievementPage = () => {
   const topStudents = sortedStudents.slice(0, 3);
   const otherStudents = sortedStudents.slice(3);
 
-  useEffect(() => {
-    // Scroll to top on component mount
-    window.scrollTo(0, 0);
-  }, []);
+ 
 
   return (
     <div className="p-6 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 min-h-screen">
