@@ -22,7 +22,6 @@ const VideoPlayer = () => {
             const unsubscribe = auth.onAuthStateChanged((user) => {
                 if (user) {
                     setUserUid(user.uid);
-                    console.log('User UID:', user.uid); // Log the user UID
                     fetchVideoData();
                 } else {
                     setUserUid(null);
@@ -74,7 +73,7 @@ const VideoPlayer = () => {
                 .filter((doc) => doc.data().fullWatched)
                 .map((doc) => doc.id);
             
-            console.log('Completed video IDs:', completedVideoIds); // Log completed video IDs
+           
             setCompletedVideos(completedVideoIds);
         } catch (error) {
             console.error('Error fetching video progress:', error);
