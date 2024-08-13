@@ -68,6 +68,11 @@ const Dashboard = () => {
     if (path.includes('achievements')) setActiveTab('achievements'); // Add achievements check
   }, []);
 
+  useEffect(() => {
+    // Scroll to top when activeTab changes
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
   if (!isDesktop) {
     return null; // Render nothing if not desktop
   }
