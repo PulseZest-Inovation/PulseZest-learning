@@ -191,7 +191,7 @@ const Dashboard = () => {
 
 const Courses = () => (
   <div>
-    <h2 className="text-4xl font-extrabold mb-6 animate-fade-in-up">Your Courses</h2>
+    <h2 className="text-4xl font-extrabold mb-6 animate-fade-in-up">Select one</h2>
     {/* Add content for Courses here */}
   </div>
 );
