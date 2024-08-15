@@ -6,7 +6,7 @@ import { FaStar, FaMedal, FaTrophy } from 'react-icons/fa';
 import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '../../../../utils/Firebase/firebaseConfig';
 
-const DesktopAchievementPage = () => {
+const DesktopPZHoF = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courses, setCourses] = useState([]);
   const [studentProgressList, setStudentProgressList] = useState([]);
@@ -52,7 +52,7 @@ const DesktopAchievementPage = () => {
   useEffect(() => {
     const fetchStudentsProgress = async () => {
       if (!selectedCourse) return;
-
+  
       setLoading(true);
       try {
         // Fetch all students
@@ -61,12 +61,12 @@ const DesktopAchievementPage = () => {
           id: doc.id,
           name: doc.data().name,
         }));
-
+  
         // Fetch course details to determine total number of videos
         const courseDoc = await getDoc(doc(db, 'courses', selectedCourse.id));
         const courseData = courseDoc.data();
         const chapters = courseData?.chapters || [];
-
+  
         // Calculate total number of videos in the course
         let totalVideos = 0;
         const videoIds = []; // To store all video IDs
@@ -78,47 +78,40 @@ const DesktopAchievementPage = () => {
             }
           }
         }
-
+  
         console.log(`Total number of videos in the course: ${totalVideos}`);
-
+  
         const progressPromises = studentsList.map(async (student) => {
           const userCoursesSnapshot = await getDocs(collection(db, 'users', student.id, 'courses'));
           const userCourses = userCoursesSnapshot.docs.map(doc => doc.id);
-
+  
           if (userCourses.includes(selectedCourse.id)) {
             const courseProgressSnapshot = await getDocs(collection(db, 'users', student.id, 'courses', selectedCourse.id, 'videoProgress'));
-            const videoProgress = {};
+            let totalProgress = 0;
+  
             courseProgressSnapshot.forEach((videoDoc) => {
               const data = videoDoc.data();
               if (data && data.progress) {
-                videoProgress[videoDoc.id] = data.progress;
+                totalProgress += data.progress / totalVideos;
+                
               }
             });
-
-            console.log(`Video progress for student ${student.name}:`, videoProgress);
-
-            // Sum up progress for all videos
-            let sumProgress = 0;
-            for (const vid of videoIds) {
-              const progress = videoProgress[vid] || 0;
-              sumProgress += progress;
-            }
-
-            // Calculate overall progress percentage
-            const overallProgress = (sumProgress / totalVideos);
-
-            return { ...student, progress: overallProgress };
+  
+            // Log total progress for the student
+            console.log(`Total progress for student ${student.name}: ${totalProgress}`);
+  
+            return { ...student, progress: totalProgress };
           } else {
             // Student hasn't enrolled in the selected course
             return { ...student, progress: 0 };
           }
         });
-
+  
         const studentProgressData = await Promise.all(progressPromises);
-
+  
         // Sort students by progress in descending order
         const sortedStudents = studentProgressData.sort((a, b) => b.progress - a.progress);
-
+  
         setStudentProgressList(sortedStudents);
         console.log('Students and their overall progress:', sortedStudents);
       } catch (error) {
@@ -128,9 +121,11 @@ const DesktopAchievementPage = () => {
         setLoading(false);
       }
     };
-
+  
     fetchStudentsProgress();
   }, [selectedCourse]);
+  
+  
 
   // Separate top 3 students
   const topStudents = studentProgressList.slice(0, 3);
@@ -213,4 +208,4 @@ const DesktopAchievementPage = () => {
   );
 };
 
-export default DesktopAchievementPage;
+export default DesktopPZHoF;
