@@ -40,9 +40,7 @@ export default function DekstopProfileScreen() {
         if (userSnapshot.exists()) {
           const userData = userSnapshot.data();
           
-          // Log userData for debugging
-          console.log("Fetched userData:", userData);
-          
+         
           // Default values for userDetails
           const userDetails = {
             title: userData.title || 'Innovative Thinker at PulseZest',
