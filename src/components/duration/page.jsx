@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { db, auth } from '../../../utils/Firebase/firebaseConfig';
+import { db, auth } from '../../utils/Firebase/firebaseConfig';
 import { collection, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -35,8 +35,16 @@ export default function Courses() {
         const fetchedCourses = [];
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          const enrollDate = data.enrollDate.toDate();
           
+          // Check if enrollDate exists and is a Timestamp object
+          let enrollDate = null;
+          if (data.enrollDate && typeof data.enrollDate.toDate === 'function') {
+            enrollDate = data.enrollDate.toDate();
+          } else {
+            console.error(`Invalid enrollDate for course ${doc.id}`);
+            return; // Skip this course if enrollDate is invalid
+          }
+
           // Calculate the end date (3 months from enroll date)
           const endDate = new Date(enrollDate);
           endDate.setMonth(endDate.getMonth() + 3);
@@ -69,17 +77,18 @@ export default function Courses() {
 
   return (
     <div>
-      <h1>Your Courses</h1>
+     
       {courses.length > 0 ? (
         <ul>
           {courses.map((course) => (
-            <li key={course.courseId}>
-              <h2>{course.courseName}</h2>
-              <p>Enroll Date: {course.enrollDate.toDateString()}</p>
-              <p>Course Id- {course.courseId} </p>
-              <p>End Date (3 months later): {course.endDate.toDateString()}</p>
-              <p>Remaining Days: {course.remainingDays} days</p>
-            </li>
+           <li key={course.courseId} className="mb-4">
+           <div className="flex items-center">
+             <p className="text-lg font-semibold text-gray-800 mr-2">Remaining Days:</p>
+             <span className={`text-lg font-bold text-white px-3 py-1 rounded-full ${course.remainingDays > 0 ? 'bg-green-500' : 'bg-red-500'}`}>
+               {course.remainingDays} days
+             </span>
+           </div>
+         </li>
           ))}
         </ul>
       ) : (
