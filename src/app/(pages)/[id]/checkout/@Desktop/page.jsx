@@ -102,6 +102,7 @@ const CheckoutPage = ({ params }) => {
     const paymentData = {
       amount: discountedPrice !== null ? discountedPrice : courseData.salePrice,
       name: userData.name,
+      email: userData.email,
       suid: userData.suid,
       courseId: courseData.courseId,
       courseName: courseData.name,
@@ -109,6 +110,7 @@ const CheckoutPage = ({ params }) => {
       date: new Date().toISOString(),
     };
   
+    console.log(paymentData)
   
     try {
       // Step 1: Request a payment token
