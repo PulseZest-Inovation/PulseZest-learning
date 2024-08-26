@@ -102,6 +102,7 @@ const CheckoutPage = ({ params }) => {
     const paymentData = {
       amount: discountedPrice !== null ? discountedPrice : courseData.salePrice,
       name: userData.name,
+      uid: userData.uid,
       email: userData.email,
       suid: userData.suid,
       courseId: courseData.courseId,
@@ -110,11 +111,10 @@ const CheckoutPage = ({ params }) => {
       date: new Date().toISOString(),
     };
   
-    console.log(paymentData)
   
     try {
       // Step 1: Request a payment token
-      const createResponse = await fetch('http://localhost:8000/api/create-payment', {
+      const createResponse = await fetch('https://pz-api-system.pulsezest.com/api/create-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(paymentData),
