@@ -589,7 +589,7 @@ const Comment = ({ courseId = '', chapterName = '', topicName = '', videoId = ''
                 >
                     <option value="newest">Newest</option>
                     <option value="likes">Most Liked</option>
-                    <option value="mentions">Mentions</option>
+                   
                 </select>
             </div>
         );
