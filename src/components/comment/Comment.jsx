@@ -373,66 +373,7 @@ const Comment = ({ courseId = '', chapterName = '', topicName = '', videoId = ''
         }
     };
 
-    const renderReplies = (replies) => {
-        return replies.map((reply) => (
-            <li key={reply.id} className="flex flex-col space-y-4" style={{ backgroundColor: reply.role === 'admin' ? '#ffcccc' : '#ffffcc', padding: '10px', borderRadius: '8px' }}>  {/* Pink for admin, yellow for normal */}
-                <div className="flex space-x-4">
-                    {renderProfilePic(reply.profilePhoto)}
-                    <div className="flex-grow">
-                        <p className="font-semibold text-gray-700">{reply.userName}</p>
-                        <div className="mt-1 text-gray-600">
-                            {editingReplyId === reply.id ? (
-                                <div>
-                                    <MentionsInput
-                                        value={replyText}
-                                        onChange={(e) => setReplyText(e.target.value)}
-                                        style={{ ...mentionStyles.control, backgroundColor: '#ffff99' }} // Light yellow background when editing reply
-                                    >
-                                        <Mention
-                                            trigger="$"
-                                            data={users.map((user) => ({ id: user.suid, display: user.name }))}
-                                            displayTransform={(id, display) => `@${display}`}
-                                        />
-                                    </MentionsInput>
-                                    <div style={{ display: 'flex', marginTop: '8px' }}>
-                                        <button onClick={() => handleSaveEditReply(reply.id, comment.id)} style={{ padding: '8px 16px', backgroundColor: '#38a169', color: 'white', borderRadius: '9999px', marginRight: '8px' }}>
-                                            Save
-                                        </button>
-                                        <button onClick={() => { setReplyText(''); setEditingReplyId(null); setReplyToCommentId(null); }} style={{ padding: '8px 16px', backgroundColor: '#e53e3e', color: 'white', borderRadius: '9999px' }}>
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    <div> {renderTextWithMentions(reply.text)}</div>
-
-                                    {reply.edited && <p style={{ color: '#a0aec0', fontStyle: 'italic' }}>Edited</p>}
-                                </>
-                            )}
-                        </div>
-                        <p className="mt-1 text-sm text-gray-400">{reply.createdAt.toLocaleString()}</p>
-                        {reply.userId === currentUser?.uid && (
-                            <div className="flex items-center space-x-2 mt-2">
-                                <button
-                                    onClick={() => handleEditReply(reply.id, comment.id)}
-                                    className="flex items-center text-gray-500 hover:text-green-500"
-                                >
-                                    <AiFillEdit className="mr-1" />
-                                </button>
-                                <button
-                                    onClick={() => handleDeleteReply(reply.id, comment.id)}
-                                    className="flex items-center text-gray-500 hover:text-red-500"
-                                >
-                                    <AiFillDelete className="mr-1" />
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </li>
-        ));
-    };
+   
 
     const renderTextWithMentions = (text) => {
         const mentionPattern = /@\[[^\]]+\]\([^\)]+\)/g; // Adjust the regex based on your mention format
